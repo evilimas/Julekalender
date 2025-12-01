@@ -16,7 +16,6 @@ const assignedLuker = ref([])
           <input v-model="value.image" type="text" placeholder="legg til bilde" />
           <input v-model="value.video" type="text" placeholder="legg til video" />
           <br />
-          <button @click="changeLuke(value, index)">Sett luke</button>
         </div>
       </div>
     </div>
