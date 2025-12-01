@@ -124,4 +124,13 @@ export const useFirebaseStore = defineStore('firebase', () => {
   //       });
   //     });
   //   };
+
+  return {
+    user,
+    errorMsg,
+    signInWithGoogle,
+    signInWithEmail,
+    createAccount,
+    signOutUser,
+  }
 })
