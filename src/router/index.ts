@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeSide from '@/views/HomeSide.vue'
 import LoginSide from '@/views/LoginSide.vue'
-import KalenderSide from '@/views/KalenderSide.vue'
+import KalenderSide from '@/components/KalenderComponent.vue'
 import LagKalenderSide from '@/views/LagKalenderSide.vue'
 
 const router = createRouter({
