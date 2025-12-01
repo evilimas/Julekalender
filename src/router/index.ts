@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
+import HomeSide from '@/views/HomeSide.vue'
 import LoginSide from '@/views/LoginSide.vue'
 import KalenderSide from '@/views/KalenderSide.vue'
+import LagKalenderSide from '@/views/LagKalenderSide.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,10 +15,16 @@ const router = createRouter({
     {
       path: '/home',
       name: 'home',
-      component: HomeView,
+      component: HomeSide,
     },
     {
-      path: '/kalender',
+      path: '/lagkalender',
+      name: 'lagkalender',
+      component: LagKalenderSide,
+    },
+
+    {
+      path: '/kalender/:kalenderId',
       name: 'kalender',
       component: KalenderSide,
     },

@@ -21,7 +21,6 @@ watch(
 <template>
   <div class="login-view">
     <section id="logged-out-view" v-if="loginPage">
-      <!-- <img class="yatzy-logo" src="../images/yatzyy.png" alt="" /> -->
       <h2>For å starte spillet, vennligst logg inn.</h2>
       <div class="container google">
         <div class="google-login">

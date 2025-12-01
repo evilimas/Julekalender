@@ -1,0 +1,67 @@
+<script lang="ts" setup>
+import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
+import defaultAvatar from '@/images/default-avatar.jpeg'
+import { useFirebaseStore } from '@/stores/firebaseStore'
+const firebaseStore = useFirebaseStore()
+const router = useRouter()
+const route = useRoute()
+
+const props = defineProps<{
+  userPhoto?: string
+}>()
+
+// const emit = defineEmits<{
+//   (e: 'signOut'): void
+// }>()
+</script>
+<template>
+  <nav class="navbar" v-if="route.path == '/home'">
+    <img :src="props.userPhoto || defaultAvatar" alt="User Avatar" />
+    <button @click="firebaseStore.signOutUser()">Logg ut</button>
+    <!-- <button @click="router.push('/edit-profile')">
+      Rediger Profil <v-icon name="la-user-edit-solid" scale="0.9" />
+    </button> -->
+  </nav>
+  <nav
+    class="navbar"
+    v-else-if="route.path !== '/login' && route.path !== '/register' && route.path !== '/'"
+  >
+    <!-- <button v-if="route.path.startsWith('/yatzy-mp/')" @click="router.push('/yatzy-mp')">
+      <v-icon name="bi-arrow-return-left" scale="0.7" /> Tilbake
+    </button> -->
+    <button v-if="route.path !== '/kalender/:kalenderId'" @click="router.push('/home')">
+      Tilbake
+    </button>
+  </nav>
+</template>
+
+<style scoped>
+.navbar {
+  display: flex;
+  gap: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #222;
+  color: #fff;
+  padding: 0.8em;
+  border-bottom: 2px solid #444;
+}
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #222;
+  color: #fff;
+  padding: 0.8em;
+  border-bottom: 2px solid #444;
+}
+img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+</style>
