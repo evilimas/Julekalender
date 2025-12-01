@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 import { useFirebaseStore } from '@/stores/FirebaseStore'
 const firebaseStore = useFirebaseStore()
+
+const assignedLuker = ref([])
 </script>
 
 <template>
@@ -9,13 +11,12 @@ const firebaseStore = useFirebaseStore()
     <div>Lag kalenderen din!</div>
     <div class="calenderStyle">
       <div v-for="(value, index) in firebaseStore.julekalender" :key="index" class="day">
-        <div :id="`dag_${index}`" @click="changeLuke(value, index)">
-          <div>{{ value.texts }}</div>
-          <input type="text" placeholder="legg til tekst" />
-          <div>{{ value.image }}</div>
-          <input type="text" placeholder="legg til bilde" />
-          <div>{{ value.video }}</div>
-          <input type="text" placeholder="legg til video" />
+        <div :id="`dag_${index}`">
+          <input v-model="value.texts" type="text" placeholder="legg til tekst" />
+          <input v-model="value.image" type="text" placeholder="legg til bilde" />
+          <input v-model="value.video" type="text" placeholder="legg til video" />
+          <br />
+          <button @click="changeLuke(value, index)">Sett luke</button>
         </div>
       </div>
     </div>
@@ -31,7 +32,7 @@ const firebaseStore = useFirebaseStore()
   background-color: maroon;
   border: 1px solid #ccc;
 }
-.day {
+.calenderStyle .day {
   background-color: red;
   padding: 2em;
   text-align: center;

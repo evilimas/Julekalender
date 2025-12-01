@@ -10,18 +10,13 @@ const route = useRoute()
 const props = defineProps<{
   userPhoto?: string
 }>()
-
-// const emit = defineEmits<{
-//   (e: 'signOut'): void
-// }>()
 </script>
 <template>
   <nav class="navbar" v-if="route.path == '/home'">
     <img :src="props.userPhoto || defaultAvatar" alt="User Avatar" />
     <button @click="firebaseStore.signOutUser()">Logg ut</button>
-    <!-- <button @click="router.push('/edit-profile')">
-      Rediger Profil <v-icon name="la-user-edit-solid" scale="0.9" />
-    </button> -->
+
+    <button @click="router.push('/lagkalender')">Lag Kalender</button>
   </nav>
   <nav
     class="navbar"
