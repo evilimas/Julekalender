@@ -112,6 +112,8 @@ export const useFirebaseStore = defineStore('firebase', () => {
   const errorMsg = ref<string | null>(null)
   const julekalender = ref<Calender>(seedCalender())
 
+  const currentDate = Timestamp.fromDate(new Date())
+
   onAuthStateChanged(auth, (u) => {
     if (u) {
       user.value = u
@@ -220,5 +222,6 @@ export const useFirebaseStore = defineStore('firebase', () => {
     signOutUser,
     createjulekalender,
     julekalender,
+    currentDate,
   }
 })

@@ -1,13 +1,19 @@
 <script lang="ts" setup>
 import { useFirebaseStore } from '@/stores/firebaseStore';
 const firebaseStore = useFirebaseStore();
+const currentDay = firebaseStore.currentDate.toDate().getDate();
+// const checkDate = (day) =>
+// if(day > currentDay){
+  
+// }
 </script>
 <template>
   <div class="kalender">
 
-    <div class="dag"  v-for="(day, index) in firebaseStore.julekalender" :key="index">
+    <div class="dag" v-for="(day, index) in firebaseStore.julekalender" :key="index" >
       <h3>Dag {{ day.day }}</h3>
-      <button v-show="!day.opened" @click="day.opened = true">Open</button>
+    
+      <button v-show="!day.opened" @click="day.opened = true" :disabled="day.day > currentDay">Open</button>
       <button v-show="day.opened" @click="day.opened = false">Close</button>
       <div v-show="day.opened">
         <p>{{ day.texts }}</p>
