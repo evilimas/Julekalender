@@ -12,7 +12,7 @@ const assignedLuker = ref([])
     <div class="calenderStyle">
       <div v-for="(value, index) in firebaseStore.julekalender" :key="index" class="day">
         <div :id="`dag_${index}`">
-          <input v-model="value.texts" type="text" placeholder="legg til tekst" />
+            <textarea v-model="value.texts" placeholder="legg til tekst"></textarea>
           <input v-model="value.image" type="text" placeholder="legg til bilde" />
           <input v-model="value.video" type="text" placeholder="legg til video" />
           <br />
