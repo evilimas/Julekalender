@@ -6,7 +6,9 @@ const firebaseStore = useFirebaseStore();
   <div class="kalender">
 
     <div class="dag"  v-for="(day, index) in firebaseStore.julekalender" :key="index">
-      <h3>Day {{ day.day }}</h3>
+      <h3>Dag {{ day.day }}</h3>
+      <button v-show="!day.opened" @click="day.opened = true">Open</button>
+      <button v-show="day.opened" @click="day.opened = false">Close</button>
       <div v-show="day.opened">
         <p>{{ day.texts }}</p>
         <img :src="day.image" alt="Bilde for dagen" v-if="day.image" />
