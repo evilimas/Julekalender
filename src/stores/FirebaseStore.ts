@@ -112,22 +112,31 @@ export const useFirebaseStore = defineStore('firebase', () => {
   const errorMsg = ref<string | null>(null)
   const julekalender = ref<Calender>(seedCalender())
 
+  const isAdmin = ref(false);
+
   const currentDate = Timestamp.fromDate(new Date())
 
-  onAuthStateChanged(auth, (u) => {
+  onAuthStateChanged(auth, async (u) => {
     if (u) {
       user.value = u
-      fetchJulekalender()
+
+      // set getIdTokenResult(true) to force update token
+      const idTokenResult = await u.getIdTokenResult(true);
+
+      isAdmin.value = idTokenResult.claims.admin === true;
+
+      await fetchJulekalender()
     } else {
       user.value = null
-      router.push('/')
+      isAdmin.value = false;
+      await router.push('/')
     }
   })
 
   const signInWithGoogle = async (): Promise<void> => {
     try {
       await signInWithPopup(auth, provider)
-      router.push('/home')
+      await router.push('/home')
     } catch (error) {
       alert('Error signing in with Google')
       errorMsg.value = (error as Error).message || 'Error signing in with Google'
@@ -137,7 +146,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
   const signInWithEmail = async (email: string, password: string): Promise<void> => {
     try {
       await signInWithEmailAndPassword(auth, email, password)
-      router.push('/home')
+      await router.push('/home')
     } catch (error) {
       errorMsg.value = (error as Error).message || 'Error signing in with email and password'
     }
@@ -157,7 +166,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
       }
       await createjulekalender(userCredential.user)
       await signInWithEmailAndPassword(auth, email, password)
-      router.push('/home')
+      await router.push('/home')
     } catch (error) {
       alert((error as Error).message)
     }
@@ -168,7 +177,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
   const signOutUser = async (): Promise<void> => {
     try {
       await signOut(auth)
-      router.push('/')
+      await router.push('/')
     } catch (error) {
       console.error('Error signing out:', error)
     }
@@ -223,5 +232,6 @@ export const useFirebaseStore = defineStore('firebase', () => {
     createjulekalender,
     julekalender,
     currentDate,
+    isAdmin
   }
 })

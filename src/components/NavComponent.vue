@@ -16,7 +16,7 @@ const props = defineProps<{
     <img :src="props.userPhoto || defaultAvatar" alt="User Avatar" />
     <button @click="firebaseStore.signOutUser()">Logg ut</button>
 
-    <button @click="router.push('/lagkalender')">Lag Kalender</button>
+    <button v-if="firebaseStore.isAdmin" @click="router.push('/lagkalender')">Lag Kalender</button>
   </nav>
   <nav
     class="navbar"
