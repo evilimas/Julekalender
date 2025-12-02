@@ -116,7 +116,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
 
       // set getIdTokenResult(true) to force update token
       const idTokenResult = await u.getIdTokenResult(true)
-
+      await fetchMainJulekalender()
       isAdmin.value = idTokenResult.claims.admin === true
     } else {
       user.value = null
@@ -124,6 +124,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
       await router.push('/')
     }
   })
+  //  sign in functions
 
   const signInWithGoogle = async (): Promise<void> => {
     try {
@@ -139,7 +140,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
     try {
       await signInWithEmailAndPassword(auth, email, password)
       await router.push('/home')
-      await fetchJulekalender()
+      await fetchMainJulekalender()
     } catch (error) {
       errorMsg.value = (error as Error).message || 'Error signing in with email and password'
     }
@@ -165,7 +166,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
     }
   }
 
-  // sign out functions
+  // sign user out functions
 
   const signOutUser = async (): Promise<void> => {
     try {
@@ -176,49 +177,36 @@ export const useFirebaseStore = defineStore('firebase', () => {
     }
   }
 
+  //  Create julekalender for new user
+
   const createjulekalender = async (user: User): Promise<string> => {
-    const gameRef = await addDoc(collection(db, 'calenders'), {
+    const calendarRef = await addDoc(collection(db, 'calenders'), {
       createdBy: { uid: user.uid, displayName: user.displayName },
       calender: seedCalender(),
       calenderStarted: false,
       createdAt: serverTimestamp(),
       uid: user?.uid,
     })
-    console.log('Game room created with ID:', gameRef.id)
-    return gameRef.id
+    return calendarRef.id
   }
 
-  const fetchJulekalender = async () => {
-    if (!user.value?.uid) {
-      console.log('No user logged in, cannot fetch julekalender')
-      return
-    }
+  //  Fetch main julekalender
 
-    const q = query(
-      collection(db, 'calenders'),
-      where('createdBy.uid', '==', user.value.uid),
-      // orderBy('createdAt', 'desc'),
-    )
-    return onSnapshot(q, async (snapshot) => {
-      if (snapshot.docs.length > 0) {
-        const firstDoc = snapshot.docs[0]
-        if (firstDoc) {
-          const data = firstDoc.data() as CalenderDocument
-          julekalender.value = data.calender
-        }
-      } else {
-        if (user.value) {
-          await createjulekalender(user.value)
-        }
-      }
-    })
-  }
   const fetchMainJulekalender = async () => {
     if (!user.value?.uid) {
       return
     }
-    const q = query(collection(db, 'calenders'), where('uid', '==', 'I4R6p01VzZXvaYupmUVb'))
+    const q = query(collection(db, 'calenders'), where('uid', '==', 'IMn8V8npRmOFcRzAeRONMrYmFf92'))
+    return onSnapshot(q, (snapshot) => {
+      const firstDoc = snapshot.docs[0]
+      if (firstDoc) {
+        const data = firstDoc.data() as CalenderDocument
+        julekalender.value = data.calender
+      }
+    })
   }
+
+  //  Update julekalender for all users
 
   const updateJulekalender = async (updatedCalender: Calender) => {
     if (!user.value?.uid) return
@@ -243,6 +231,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
     createAccount,
     signOutUser,
     createjulekalender,
+    fetchMainJulekalender,
     julekalender,
     currentDate,
     isAdmin,
