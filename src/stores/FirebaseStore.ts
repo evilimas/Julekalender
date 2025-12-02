@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed, type ComputedRef, watch } from 'vue'
+import { ref, computed, type ComputedRef } from 'vue'
 import router from '@/router'
 import { auth } from '@/services/firebase'
 import type { User } from 'firebase/auth'
@@ -20,17 +20,11 @@ import {
   addDoc,
   serverTimestamp,
   getDocs,
-  getDoc,
   onSnapshot,
   query,
   where,
+  writeBatch,
   orderBy,
-  deleteDoc,
-  updateDoc,
-  setDoc,
-  Firestore,
-  arrayUnion,
-  doc,
 } from 'firebase/firestore'
 
 type CalenderDay = {
@@ -110,9 +104,9 @@ export const useFirebaseStore = defineStore('firebase', () => {
   const provider = new GoogleAuthProvider()
   const user = ref<User | null>(null)
   const errorMsg = ref<string | null>(null)
-  const julekalender = ref<Calender>(seedCalender())
+  const julekalender = ref<Calender | null>(null)
 
-  const isAdmin = ref(false);
+  const isAdmin = ref(false)
 
   const currentDate = Timestamp.fromDate(new Date())
 
@@ -121,14 +115,12 @@ export const useFirebaseStore = defineStore('firebase', () => {
       user.value = u
 
       // set getIdTokenResult(true) to force update token
-      const idTokenResult = await u.getIdTokenResult(true);
+      const idTokenResult = await u.getIdTokenResult(true)
 
-      isAdmin.value = idTokenResult.claims.admin === true;
-
-      await fetchJulekalender()
+      isAdmin.value = idTokenResult.claims.admin === true
     } else {
       user.value = null
-      isAdmin.value = false;
+      isAdmin.value = false
       await router.push('/')
     }
   })
@@ -147,6 +139,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
     try {
       await signInWithEmailAndPassword(auth, email, password)
       await router.push('/home')
+      await fetchJulekalender()
     } catch (error) {
       errorMsg.value = (error as Error).message || 'Error signing in with email and password'
     }
@@ -196,30 +189,50 @@ export const useFirebaseStore = defineStore('firebase', () => {
   }
 
   const fetchJulekalender = async () => {
-    if (!user.value?.uid) return
+    if (!user.value?.uid) {
+      console.log('No user logged in, cannot fetch julekalender')
+      return
+    }
 
     const q = query(
       collection(db, 'calenders'),
       where('createdBy.uid', '==', user.value.uid),
-      orderBy('createdAt', 'desc'),
+      // orderBy('createdAt', 'desc'),
     )
-
-    return onSnapshot(
-      q,
-      (snapshot) => {
-        if (snapshot.docs.length > 0) {
-          const firstDoc = snapshot.docs[0]
-          if (firstDoc) {
-            const data = firstDoc.data() as CalenderDocument
-            julekalender.value = data.calender
-          }
+    return onSnapshot(q, async (snapshot) => {
+      if (snapshot.docs.length > 0) {
+        const firstDoc = snapshot.docs[0]
+        if (firstDoc) {
+          const data = firstDoc.data() as CalenderDocument
+          julekalender.value = data.calender
         }
-      },
-      (error) => {
-        console.error('Error fetching calendar:', error)
-        errorMsg.value = 'Failed to fetch calendar'
-      },
-    )
+      } else {
+        if (user.value) {
+          await createjulekalender(user.value)
+        }
+      }
+    })
+  }
+  const fetchMainJulekalender = async () => {
+    if (!user.value?.uid) {
+      return
+    }
+    const q = query(collection(db, 'calenders'), where('uid', '==', 'I4R6p01VzZXvaYupmUVb'))
+  }
+
+  const updateJulekalender = async (updatedCalender: Calender) => {
+    if (!user.value?.uid) return
+    try {
+      const allCalendarsSnapshot = await getDocs(collection(db, 'calenders'))
+      const batch = writeBatch(db)
+      allCalendarsSnapshot.docs.forEach((userDoc) => {
+        batch.update(userDoc.ref, { calender: updatedCalender })
+      })
+      await batch.commit()
+      julekalender.value = updatedCalender
+    } catch (error) {
+      console.error('Error updating julekalender:', error)
+    }
   }
 
   return {
@@ -232,6 +245,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
     createjulekalender,
     julekalender,
     currentDate,
-    isAdmin
+    isAdmin,
+    updateJulekalender,
   }
 })

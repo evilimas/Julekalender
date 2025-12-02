@@ -19,6 +19,7 @@ const assignedLuker = ref([])
         </div>
       </div>
     </div>
+    <button @click="firebaseStore.updateJulekalender(firebaseStore.julekalender)">Lagre kalender</button>
   </div>
 </template>
 
