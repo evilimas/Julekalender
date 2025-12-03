@@ -3,8 +3,9 @@ import { ref } from 'vue';
 import { useFirebaseStore } from '@/stores/firebaseStore';
 const firebaseStore = useFirebaseStore();
 const currentDay = firebaseStore.currentDate.toDate().getDate();
+import type { CalenderDay } from '@/stores/firebaseStore';
 
-const unlockLuke = (dayObj: object, dayNum: number) => {
+const unlockLuke = (dayObj: CalenderDay, dayNum: number) => {
   const getCurrentElement = document.getElementsByClassName("dag")[dayNum - 1];
   const getCurrentElementbutton = getCurrentElement?.getElementsByTagName("button")[0];
   // dayObj.openable !!!!
@@ -22,9 +23,6 @@ const unlockLuke = (dayObj: object, dayNum: number) => {
   } else {
     getCurrentElement!.getElementsByTagName("div")[0]!.innerHTML += `<div>Å NO YOU DONT!!</div>`;
 
-    const myTime = setTimeout(() => {
-      getCurrentElement!.getElementsByTagName("div")[0]!.innerHTML = "";
-    }, 4000);
   }
 }
 </script>
@@ -58,11 +56,38 @@ const unlockLuke = (dayObj: object, dayNum: number) => {
    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 10px;
   margin: 0 auto;
-  margin-top: 110px;
+  /* margin-top: 110px; */
   
 }
 .dag {
   /* margin: 20px; */
   border: 1px solid #ccc;
 }
+
+.dag h3 {
+  background-color: maroon;
+  color: white;
+  padding: 10px;
+  margin: 0;
+}
+.dag button {
+  margin: 10px 0;
+  padding: 5px 10px;
+  background-color: #444;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.dag button:hover {
+  background-color: #666;
+}
+.dag img {
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+}
+.dag video {
+  margin-top: 10px;
+}
+
 </style>

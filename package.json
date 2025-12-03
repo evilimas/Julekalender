@@ -18,9 +18,13 @@
   "dependencies": {
     "firebase": "^12.6.0",
     "pinia": "^3.0.4",
+    "snowf": "^0.0.3",
     "vue": "^3.5.25",
     "vue-confetti-explosion": "^1.0.2",
-    "vue-router": "^4.6.3"
+    "vue-niege": "^0.1.1",
+    "vue-router": "^4.6.3",
+    "vue-snowf": "^0.0.2",
+    "vue-snowfall": "^1.0.3"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.3",

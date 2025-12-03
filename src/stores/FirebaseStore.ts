@@ -25,13 +25,14 @@ import {
   where,
   writeBatch,
   orderBy,
+  updateDoc,
 } from 'firebase/firestore'
 
-type CalenderDay = {
+export type CalenderDay = {
   day: number
   texts: string
   opened: boolean
-  openable?: boolean
+  openable: boolean
   image?: string
   video?: string
 }
@@ -73,30 +74,30 @@ type CalenderDocument = {
 }
 
 const seedCalender = (): Calender => ({
-  day1: { day: 1, texts: 'Day 1 content', opened: false },
-  day2: { day: 2, texts: 'Day 2 content', opened: false },
-  day3: { day: 3, texts: 'Day 3 content', opened: false },
-  day4: { day: 4, texts: 'Day 4 content', opened: false },
-  day5: { day: 5, texts: 'Day 5 content', opened: false },
-  day6: { day: 6, texts: 'Day 6 content', opened: false },
-  day7: { day: 7, texts: 'Day 7 content', opened: false },
-  day8: { day: 8, texts: 'Day 8 content', opened: false },
-  day9: { day: 9, texts: 'Day 9 content', opened: false },
-  day10: { day: 10, texts: 'Day 10 content', opened: false },
-  day11: { day: 11, texts: 'Day 11 content', opened: false },
-  day12: { day: 12, texts: 'Day 12 content', opened: false },
-  day13: { day: 13, texts: 'Day 13 content', opened: false },
-  day14: { day: 14, texts: 'Day 14 content', opened: false },
-  day15: { day: 15, texts: 'Day 15 content', opened: false },
-  day16: { day: 16, texts: 'Day 16 content', opened: false },
-  day17: { day: 17, texts: 'Day 17 content', opened: false },
-  day18: { day: 18, texts: 'Day 18 content', opened: false },
-  day19: { day: 19, texts: 'Day 19 content', opened: false },
-  day20: { day: 20, texts: 'Day 20 content', opened: false },
-  day21: { day: 21, texts: 'Day 21 content', opened: false },
-  day22: { day: 22, texts: 'Day 22 content', opened: false },
-  day23: { day: 23, texts: 'Day 23 content', opened: false },
-  day24: { day: 24, texts: 'Day 24 content', opened: false },
+  day1: { day: 1, texts: 'Day 1 content', opened: false, openable: false },
+  day2: { day: 2, texts: 'Day 2 content', opened: false, openable: false },
+  day3: { day: 3, texts: 'Day 3 content', opened: false, openable: false },
+  day4: { day: 4, texts: 'Day 4 content', opened: false, openable: false },
+  day5: { day: 5, texts: 'Day 5 content', opened: false, openable: false },
+  day6: { day: 6, texts: 'Day 6 content', opened: false, openable: false },
+  day7: { day: 7, texts: 'Day 7 content', opened: false, openable: false },
+  day8: { day: 8, texts: 'Day 8 content', opened: false, openable: false },
+  day9: { day: 9, texts: 'Day 9 content', opened: false, openable: false },
+  day10: { day: 10, texts: 'Day 10 content', opened: false, openable: false },
+  day11: { day: 11, texts: 'Day 11 content', opened: false, openable: false },
+  day12: { day: 12, texts: 'Day 12 content', opened: false, openable: false },
+  day13: { day: 13, texts: 'Day 13 content', opened: false, openable: false },
+  day14: { day: 14, texts: 'Day 14 content', opened: false, openable: false },
+  day15: { day: 15, texts: 'Day 15 content', opened: false, openable: false },
+  day16: { day: 16, texts: 'Day 16 content', opened: false, openable: false },
+  day17: { day: 17, texts: 'Day 17 content', opened: false, openable: false },
+  day18: { day: 18, texts: 'Day 18 content', opened: false, openable: false },
+  day19: { day: 19, texts: 'Day 19 content', opened: false, openable: false },
+  day20: { day: 20, texts: 'Day 20 content', opened: false, openable: false },
+  day21: { day: 21, texts: 'Day 21 content', opened: false, openable: false },
+  day22: { day: 22, texts: 'Day 22 content', opened: false, openable: false },
+  day23: { day: 23, texts: 'Day 23 content', opened: false, openable: false },
+  day24: { day: 24, texts: 'Day 24 content', opened: false, openable: false },
 })
 
 export const useFirebaseStore = defineStore('firebase', () => {
@@ -114,6 +115,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
       // set getIdTokenResult(true) to force update token
       const idTokenResult = await u.getIdTokenResult(true)
       await fetchMainJulekalender()
+      await updateOpenableStatus(new Date().getDate())
       isAdmin.value = idTokenResult.claims.admin === true
     } else {
       user.value = null
@@ -191,17 +193,46 @@ export const useFirebaseStore = defineStore('firebase', () => {
 
   //  Fetch main julekalender
 
+  const updateOpenableStatus = async (date: number) => {
+    if (!user.value?.uid) return
+    const currentDate = new Date()
+    const currentDay = currentDate.getDate()
+    if (date <= currentDay) {
+      try {
+        const q = query(
+          collection(db, 'calenders'),
+          where('uid', '==', 'IMn8V8npRmOFcRzAeRONMrYmFf92'),
+        )
+        const querySnapshot = await getDocs(q)
+        if (!querySnapshot.empty) {
+          const docRef = querySnapshot.docs[0]!.ref
+          await updateDoc(docRef, { openable: true })
+        }
+      } catch (error) {
+        console.error('Error updating openable status:', error)
+      }
+    }
+  }
+
   const fetchMainJulekalender = async () => {
     const q = query(
       collection(db, 'calenders'),
       where('uid', '==', 'IMn8V8npRmOFcRzAeRONMrYmFf92'),
-      orderBy('__name__', 'desc'),
+      orderBy('createdAt', 'desc'),
     )
     return onSnapshot(q, (snapshot) => {
       const firstDoc = snapshot.docs[0]
       if (firstDoc) {
         const data = firstDoc.data() as CalenderDocument
         julekalender.value = data.calender
+
+        const sortedDays = Object.values(julekalender.value).sort((a, b) => a.day - b.day)
+        const sortedCalender: Calender = {} as Calender
+        sortedDays.forEach((day) => {
+          const key = `day${day.day}` as keyof Calender
+          sortedCalender[key] = day
+        })
+        julekalender.value = sortedCalender
       }
     })
   }
