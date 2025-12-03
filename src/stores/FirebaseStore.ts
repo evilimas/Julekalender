@@ -105,15 +105,12 @@ export const useFirebaseStore = defineStore('firebase', () => {
   const user = ref<User | null>(null)
   const errorMsg = ref<string | null>(null)
   const julekalender = ref<Calender | null>(null)
-
-  const isAdmin = ref(false)
-
+  const isAdmin = ref<boolean>(false)
   const currentDate = Timestamp.fromDate(new Date())
 
   onAuthStateChanged(auth, async (u) => {
     if (u) {
       user.value = u
-
       // set getIdTokenResult(true) to force update token
       const idTokenResult = await u.getIdTokenResult(true)
       await fetchMainJulekalender()
@@ -128,8 +125,10 @@ export const useFirebaseStore = defineStore('firebase', () => {
 
   const signInWithGoogle = async (): Promise<void> => {
     try {
+      await createjulekalender(auth.currentUser as User)
       await signInWithPopup(auth, provider)
       await router.push('/home')
+      await fetchMainJulekalender()
     } catch (error) {
       alert('Error signing in with Google')
       errorMsg.value = (error as Error).message || 'Error signing in with Google'

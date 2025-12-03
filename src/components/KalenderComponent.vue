@@ -34,8 +34,10 @@ const currentDay = firebaseStore.currentDate.toDate().getDate();
 <style scoped>
 .kalender {
   display: grid;
+  max-width: 1000px;
    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 10px;
+  margin: 0 auto;
   margin-top: 110px;
   
 }
