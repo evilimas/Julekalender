@@ -193,9 +193,6 @@ export const useFirebaseStore = defineStore('firebase', () => {
   //  Fetch main julekalender
 
   const fetchMainJulekalender = async () => {
-    if (!user.value?.uid) {
-      return
-    }
     const q = query(collection(db, 'calenders'), where('uid', '==', 'IMn8V8npRmOFcRzAeRONMrYmFf92'))
     return onSnapshot(q, (snapshot) => {
       const firstDoc = snapshot.docs[0]

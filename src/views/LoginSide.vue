@@ -21,7 +21,7 @@ watch(
 <template>
   <div class="login-view">
     <section id="logged-out-view" v-if="loginPage">
-      <h2>For å starte spillet, vennligst logg inn.</h2>
+      <h2>For å starte opne kalenderen, vennligst logg inn.</h2>
       <div class="container google">
         <div class="google-login">
           <button
@@ -96,11 +96,33 @@ watch(
 </template>
 
 <style scoped>
+.login-view{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: rgb(168, 8, 8);
+  color: #ffffff;
+}
+h2{
+  color: white;
+}
+h3 a{
+  color: rgb(62, 243, 219);
+}
+h3 a:hover{
+  text-decoration: underline;
+}
 section {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  border: 2px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: rgb(116, 7, 7);
 }
 .container {
   display: flex;
@@ -118,7 +140,16 @@ input {
 }
 .google-login {
   display: flex;
+  
 }
+.google-login button:hover img {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+.google-login button{
+  cursor: pointer;
+}
+
 a {
   cursor: pointer;
 }
@@ -150,9 +181,15 @@ form {
   color: red;
   font-weight: 600;
 }
-.yatzy-logo {
-  width: 350px;
-  height: auto;
-  margin-bottom: 20px;
+.primary-btn {
+  background-color: rgb(62, 243, 219);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  color: #000000;
+  cursor: pointer;
+}
+.primary-btn:hover {
+  background-color: #00cccc;
 }
 </style>

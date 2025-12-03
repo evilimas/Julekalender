@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useFirebaseStore } from '@/stores/FirebaseStore'
 const firebaseStore = useFirebaseStore()
 
-const assignedLuker = ref([])
+// const assignedLuker = ref([])
 </script>
 
 <template>
@@ -12,6 +12,7 @@ const assignedLuker = ref([])
     <div class="calenderStyle">
       <div v-for="(value, index) in firebaseStore.julekalender" :key="index" class="day">
         <div :id="`dag_${index}`">
+          <h2>Dag {{ value.day }}</h2>
             <textarea v-model="value.texts" placeholder="legg til tekst"></textarea>
           <input v-model="value.image" type="text" placeholder="legg til bilde" />
           <input v-model="value.video" type="text" placeholder="legg til video" />
