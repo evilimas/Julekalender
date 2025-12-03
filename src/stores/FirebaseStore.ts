@@ -205,7 +205,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
 
   //  Update julekalender for all users
 
-  const updateJulekalender = async (updatedCalender: Calender) => {
+  const updateJulekalender = async (updatedCalender: Calender | null) => {
     if (!user.value?.uid) return
     try {
       const allCalendarsSnapshot = await getDocs(collection(db, 'calenders'))
