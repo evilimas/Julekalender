@@ -56,6 +56,7 @@ const props = defineProps<{
   color: #fff;
   padding: 0.8em;
   border-bottom: 2px solid #444;
+  z-index: 1000;
 }
 img {
   width: 30px;
