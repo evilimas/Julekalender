@@ -37,17 +37,13 @@ const unlockLuke = (dayObj: CalenderDay, dayNum: number) => {
         <p>{{ day.texts }}</p>
         <img :src="day.image" alt="Bilde for dagen" v-if="day.image" />
         <div v-if="day.video">
-          <video width="320" height="240" controls>
-            <source :src="day.video" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+          <iframe :src="day.video"></iframe>
         </div>
       </div>
     </div>
 
   </div>
 </template>
-
 
 <style scoped>
 .kalender {
@@ -62,6 +58,10 @@ const unlockLuke = (dayObj: CalenderDay, dayNum: number) => {
 .dag {
   /* margin: 20px; */
   border: 1px solid #ccc;
+  background: rgba(98, 117, 149, 0.5);
+  text-align: center;
+  padding: 10px;
+  border-radius: 0 0 20px 20px;
 }
 
 .dag h3 {
@@ -73,21 +73,20 @@ const unlockLuke = (dayObj: CalenderDay, dayNum: number) => {
 .dag button {
   margin: 10px 0;
   padding: 5px 10px;
-  background-color: #444;
   color: white;
+  background-color: #8298FC;
   border: none;
+  border-radius: 30px;
   cursor: pointer;
 }
 .dag button:hover {
-  background-color: #666;
+  filter: hue-rotate(150deg) saturate(0.5) brightness(1.1);
 }
-.dag img {
-  max-width: 100%;
+.dag iframe, .dag img {
+  padding: 4px 0;
   height: auto;
-  margin-top: 10px;
-}
-.dag video {
-  margin-top: 10px;
+  max-width: 100%;
+  border-radius: 40px;
 }
 
 </style>
