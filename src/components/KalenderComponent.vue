@@ -1,20 +1,40 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { useFirebaseStore } from '@/stores/firebaseStore';
 const firebaseStore = useFirebaseStore();
 const currentDay = firebaseStore.currentDate.toDate().getDate();
-// const checkDate = (day) =>
-// if(day > currentDay){
-  
-// }
+
+const unlockLuke = (dayObj: object, dayNum: number) => {
+  const getCurrentElement = document.getElementsByClassName("dag")[dayNum - 1];
+  const getCurrentElementbutton = getCurrentElement?.getElementsByTagName("button")[0];
+  // dayObj.openable !!!!
+
+  if (dayNum <= currentDay) { //<-- dette burde være dayObj.openable!!
+    if (dayObj.opened == true) {
+      getCurrentElementbutton!.innerHTML = "åpne";
+      //buttonTxt.value = "Open";
+      dayObj.opened = false;
+    }
+    else {
+      getCurrentElementbutton!.innerHTML = "lukk";
+      dayObj.opened = true;
+    }
+  } else {
+    getCurrentElement!.getElementsByTagName("div")[0]!.innerHTML += `<div>Å NO YOU DONT!!</div>`;
+
+    const myTime = setTimeout(() => {
+      getCurrentElement!.getElementsByTagName("div")[0]!.innerHTML = "";
+    }, 4000);
+  }
+}
 </script>
 <template>
   <div class="kalender">
 
-    <div class="dag" v-for="(day, index) in firebaseStore.julekalender" :key="index" >
+    <div class="dag" v-for="(day, index) in firebaseStore.julekalender" :key="index">
       <h3>Dag {{ day.day }}</h3>
-    
-      <button v-show="!day.opened" @click="day.opened = true" :disabled="day.day > currentDay">Open</button>
-      <button v-show="day.opened" @click="day.opened = false">Close</button>
+
+      <button @click="unlockLuke(day, day.day)">lås opp</button> <!--:disabled="day.day > currentDay"--->
       <div v-show="day.opened">
         <p>{{ day.texts }}</p>
         <img :src="day.image" alt="Bilde for dagen" v-if="day.image" />

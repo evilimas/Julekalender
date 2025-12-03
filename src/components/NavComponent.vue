@@ -15,7 +15,7 @@ const props = defineProps<{
   <nav class="navbar" v-if="route.path == '/home'">
     
       <img :src="props.userPhoto || defaultAvatar" alt="User Avatar" />
-      <p>{{ firebaseStore.user?.displayName || firebaseStore.user?.email }}</p>
+      <p>{{ firebaseStore.user?.displayName ? firebaseStore.user?.displayName : firebaseStore.user?.email }}</p>
       <button @click="firebaseStore.signOutUser()">Logg ut</button>
 
 
