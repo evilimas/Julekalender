@@ -2,24 +2,28 @@
 import { useRouter } from 'vue-router'
 import { useRoute } from 'vue-router'
 import defaultAvatar from '@/images/default-avatar.jpeg'
-import { useFirebaseStore } from '@/stores/firebaseStore'
+import { useFirebaseStore } from '@/stores/FirebaseStore'
 const firebaseStore = useFirebaseStore()
 const router = useRouter()
 const route = useRoute()
 
-const props = defineProps<{
-  userPhoto?: string
-}>()
 </script>
 <template>
   <nav class="navbar" v-if="route.path == '/home'">
     
-      <img :src="props.userPhoto || defaultAvatar" alt="User Avatar" />
+    
+    <div class="left-side">
+      
+      <button v-if="firebaseStore.isAdmin" @click="router.push('/lagkalender')">Lag Kalender</button>
+      <button v-if="firebaseStore.isAdmin" @click="router.push('/styling')">Endre Styling</button>
+    </div>
+
+    <div class="right-side">
+
+      <img :src="defaultAvatar" alt="User Avatar" />
       <p>{{ firebaseStore.user?.displayName ? firebaseStore.user?.displayName : firebaseStore.user?.email }}</p>
       <button @click="firebaseStore.signOutUser()">Logg ut</button>
-
-
-    <button v-if="firebaseStore.isAdmin" @click="router.push('/lagkalender')">Lag Kalender</button>
+    </div>
   </nav>
   <nav
     class="navbar"
@@ -81,5 +85,15 @@ button:hover {
 p {
   margin: 0;
   align-self: center;
+}
+.left-side {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+}
+.right-side {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 </style>

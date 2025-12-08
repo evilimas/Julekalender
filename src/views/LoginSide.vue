@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 
-import { useFirebaseStore } from '@/stores/firebaseStore'
+import { useFirebaseStore } from '@/stores/FirebaseStore'
 const firebaseStore = useFirebaseStore()
 
 const email = ref<string>('')

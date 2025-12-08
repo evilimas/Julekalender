@@ -1,49 +1,66 @@
 <script lang="ts" setup>
-// import { ref } from 'vue'
-import { useFirebaseStore } from '@/stores/firebaseStore'
+import { type CalenderDay, useFirebaseStore } from '@/stores/FirebaseStore'
 const firebaseStore = useFirebaseStore()
+
+import { useFixLink } from "@/LinkConverter/LinkConverter.ts";
+
+const {linkConverter} = useFixLink();
+
+const updateKalender = () => {
+  Object.values(firebaseStore.julekalender as Record<string, CalenderDay>).forEach(item => {
+    if(item.video) {
+      item.video = linkConverter(item.video as string);
+    }
+  });
+
+  firebaseStore.updateJulekalender(firebaseStore.julekalender);
+}
 
 // const assignedLuker = ref([])
 </script>
 
 <template>
   <div class="container">
-    <div class="header">
-      <h1>🎄 Lag kalenderen din! 🎄</h1>
-      <p>Rediger innhold for hver dag i julekalenderen</p>
-    </div>
-    
-    <div class="calendar-grid">
-      <div v-for="(value, index) in firebaseStore.julekalender" :key="index" class="day-card">
-        <div class="day-content">
-          <div class="day-header">
-            <h3>📅 Dag {{ value.day }}</h3>
-          </div>
-          
-          <div class="input-group">
-            <label>📝 Tekst:</label>
-            <textarea 
-              v-model="value.texts" 
+    <div class="content">
+
+      <div class="header">
+        <h1>🎄 Lag kalenderen din! 🎄</h1>
+        <p>Rediger innhold for hver dag i julekalenderen</p>
+      </div>
+      
+      <div class="calendar-grid">
+        <div v-for="(value, index) in firebaseStore.julekalender" :key="index" class="day-card">
+          <div class="day-content">
+            <div class="day-header">
+              <h3>📅 Dag {{ value.day }}</h3>
+            </div>
+            
+            <div class="input-group">
+              <label>📝 Tekst:</label>
+              <textarea
+              v-model="value.texts"
               placeholder="Skriv inn tekst for denne dagen..."
               rows="3"
-            ></textarea>
+              ></textarea>
           </div>
-          
+
           <div class="input-group">
             <label>🖼️ Bilde URL:</label>
-            <input 
-              v-model="value.image" 
-              type="text" 
-              placeholder="https://example.com/image.jpg" 
+            <input
+            v-model="value.image"
+            type="text"
+            placeholder="https://example.com/image.jpg"
             />
           </div>
           
           <div class="input-group">
             <label>🎥 Video URL:</label>
-            <input 
-              v-model="value.video" 
-              type="text" 
-              placeholder="https://example.com/video.mp4" 
+            <input
+            v-model="value.video"
+            type="text"
+            placeholder="https://example.com/video.mp4"
+            
+            
             />
           </div>
         </div>
@@ -51,24 +68,29 @@ const firebaseStore = useFirebaseStore()
     </div>
     
     <div class="save-section">
-      <button 
-        class="save-btn" 
-        @click="firebaseStore.updateJulekalender(firebaseStore.julekalender)"
+      <button
+      class="save-btn"
+      @click="updateKalender"
       >
-        💾 Lagre kalender
-      </button>
-    </div>
+      💾 Lagre kalender
+    </button>
+  </div>
+</div>
   </div>
 </template>
 
 <style scoped>
 .container {
   padding: 2rem;
-  max-width: 1200px;
+  /* max-width: 1200px; */
   margin: 0 auto;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   padding-top: 100px;
+}
+.content{
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .header {
@@ -97,7 +119,7 @@ const firebaseStore = useFirebaseStore()
 }
 
 .day-card {
-  background: white;
+  background: rgb(226, 226, 226);
   border-radius: 15px;
   padding: 1.5rem;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
@@ -190,11 +212,11 @@ textarea {
     padding: 1rem;
     padding-top: 80px;
   }
-  
+
   .calendar-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .header h1 {
     font-size: 2rem;
   }
