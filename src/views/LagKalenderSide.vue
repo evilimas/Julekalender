@@ -6,7 +6,7 @@ import { useFixLink } from "@/LinkConverter/LinkConverter.ts";
 
 const {linkConverter} = useFixLink();
 
-/*const updateKalender = () => {
+const updateKalender = () => {
   Object.values(firebaseStore.julekalender as Record<string, CalenderDay>).forEach(item => {
     if(item.video) {
       item.video = linkConverter(item.video as string);
@@ -14,7 +14,7 @@ const {linkConverter} = useFixLink();
   });
 
   firebaseStore.updateJulekalender(firebaseStore.julekalender);
-}*/
+}
 
 // const assignedLuker = ref([])
 </script>
