@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import KalenderComponent from '@/components/KalenderComponent.vue';
-import { useFirebaseStore } from '@/stores/firebaseStore';
+import { useFirebaseStore } from '@/stores/FirebaseStore';
 const firebaseStore = useFirebaseStore();
 </script>
 

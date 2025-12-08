@@ -1,6 +1,6 @@
       <script lang="ts" setup>
         import { ref } from 'vue';
-        import { useFirebaseStore } from '@/stores/firebaseStore';
+        import { useFirebaseStore } from '@/stores/FirebaseStore';
         
         const firebaseStore = useFirebaseStore();
         const defaultBgImage = "./src/images/hero.jpg";
@@ -12,11 +12,25 @@
         const message = ref<string>('');
         
         
+        // const updateStyle = async () => {
+        //   try {
+        //     isUpdating.value = true;
+        //     message.value = '';
+        //     await firebaseStore.updateStyleValue('backgroundImage', bgImage.value);
+        //     message.value = 'Background updated successfully! ✅';
+        //   } catch (error) {
+        //     message.value = 'Failed to update background ❌';
+        //     console.error(error);
+        //   } finally {
+        //     isUpdating.value = false;
+        //     setTimeout(() => message.value = '', 3000);
+        //   }
+        // };
         const updateBackground = async () => {
           try {
             isUpdating.value = true;
             message.value = '';
-            await firebaseStore.updateBackgroundImage(bgImage.value);
+            await firebaseStore.updateStyleValue('backgroundImage', bgImage.value);
             message.value = 'Background updated successfully! ✅';
           } catch (error) {
             message.value = 'Failed to update background ❌';
@@ -31,7 +45,7 @@
           try {
             isUpdating.value = true;
             message.value = '';
-            await firebaseStore.updatePrimaryColor(primaryColor.value);
+            await firebaseStore.updateStyleValue('primaryColor', primaryColor.value);
             message.value = 'Primary color updated successfully! ✅';
           } catch (error) {
             message.value = 'Failed to update primary color ❌';
@@ -46,7 +60,7 @@
           try {
             isUpdating.value = true;
             message.value = '';
-            await firebaseStore.updateSecondaryColor(secondaryColor.value);
+            await firebaseStore.updateStyleValue('secondaryColor', secondaryColor.value);
             message.value = 'Secondary color updated successfully! ✅';
           } catch (error) {
             message.value = 'Failed to update secondary color ❌';
@@ -61,7 +75,7 @@
           try {
             isUpdating.value = true;
             message.value = '';
-            await firebaseStore.updateTextColor(textColor.value);
+            await firebaseStore.updateStyleValue('textColor', textColor.value);
             message.value = 'Text color updated successfully! ✅';
           } catch (error) {
             message.value = 'Failed to update text color ❌';

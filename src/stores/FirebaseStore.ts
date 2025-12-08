@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed, type ComputedRef } from 'vue'
+import { ref } from 'vue'
 import router from '@/router'
 import { auth } from '@/services/firebase'
 import type { User } from 'firebase/auth'
@@ -300,51 +300,13 @@ export const useFirebaseStore = defineStore('firebase', () => {
     }
   }
 
-  // update background image
+  // update style
 
-  const updateBackgroundImage = async (newBgImage: string): Promise<void> => {
+  const updateStyleValue = async (styleOption: string, newValue: string): Promise<void> => {
     const q = query(collection(db, 'styles'), where('uid', '==', user.value?.uid))
     const querySnapshot = await getDocs(q)
-
-    if (!querySnapshot.empty) {
-      await updateDoc(querySnapshot.docs[0]!.ref, { backgroundImage: newBgImage })
-      await fetchStyleDocument()
-    }
-  }
-
-  // update primary color
-
-  const updatePrimaryColor = async (newPrimaryColor: string): Promise<void> => {
-    const q = query(collection(db, 'styles'), where('uid', '==', user.value?.uid))
-    const querySnapshot = await getDocs(q)
-
-    if (!querySnapshot.empty) {
-      await updateDoc(querySnapshot.docs[0]!.ref, { primaryColor: newPrimaryColor })
-      await fetchStyleDocument()
-    }
-  }
-
-  // update secondary color
-
-  const updateSecondaryColor = async (newSecondaryColor: string): Promise<void> => {
-    const q = query(collection(db, 'styles'), where('uid', '==', user.value?.uid))
-    const querySnapshot = await getDocs(q)
-
-    if (!querySnapshot.empty) {
-      await updateDoc(querySnapshot.docs[0]!.ref, { secondaryColor: newSecondaryColor })
-      await fetchStyleDocument()
-    }
-  }
-
-  // update text color
-  const updateTextColor = async (newTextColor: string): Promise<void> => {
-    const q = query(collection(db, 'styles'), where('uid', '==', user.value?.uid))
-    const querySnapshot = await getDocs(q)
-
-    if (!querySnapshot.empty) {
-      await updateDoc(querySnapshot.docs[0]!.ref, { textColor: newTextColor })
-      await fetchStyleDocument()
-    }
+    await updateDoc(querySnapshot.docs[0]!.ref, { [styleOption]: newValue })
+    await fetchStyleDocument()
   }
 
   return {
@@ -361,10 +323,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
     isAdmin,
     updateJulekalender,
     // styling
-    updateBackgroundImage,
-    updatePrimaryColor,
-    updateSecondaryColor,
-    updateTextColor,
+    updateStyleValue,
     styleDocument,
   }
 })
