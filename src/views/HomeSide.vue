@@ -20,7 +20,7 @@ const firebaseStore = useFirebaseStore();
   align-items: center;
   background: url('../images/hero.jpg') no-repeat center center;
   background-size: cover;
-  height: 100vh;
+  height: calc(100vh - 100px);
   padding-top: 100px;
   overflow: hidden;
 }

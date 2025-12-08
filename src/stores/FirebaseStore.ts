@@ -145,7 +145,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
 
   const signInWithGoogle = async (): Promise<void> => {
     try {
-      await createjulekalender(auth.currentUser as User)
+      // await createjulekalender(auth.currentUser as User)
       await signInWithPopup(auth, provider)
       await router.push('/home')
       await fetchMainJulekalender()

@@ -12,20 +12,6 @@
         const message = ref<string>('');
         
         
-        // const updateStyle = async () => {
-        //   try {
-        //     isUpdating.value = true;
-        //     message.value = '';
-        //     await firebaseStore.updateStyleValue('backgroundImage', bgImage.value);
-        //     message.value = 'Background updated successfully! ✅';
-        //   } catch (error) {
-        //     message.value = 'Failed to update background ❌';
-        //     console.error(error);
-        //   } finally {
-        //     isUpdating.value = false;
-        //     setTimeout(() => message.value = '', 3000);
-        //   }
-        // };
         const updateBackground = async () => {
           try {
             isUpdating.value = true;
@@ -95,7 +81,7 @@
             
             <h1>Styling Side</h1>
             <p>Her kan du endre bakgrunns bilde og farger!</p>
-        </div>
+        </div> 
         
 
         <div v-if="message" class="message" :class="{ success: message.includes('✅'), error: message.includes('❌') }">
