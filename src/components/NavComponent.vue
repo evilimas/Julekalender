@@ -20,6 +20,7 @@ const props = defineProps<{
 
 
     <button v-if="firebaseStore.isAdmin" @click="router.push('/lagkalender')">Lag Kalender</button>
+    <button v-if="firebaseStore.isAdmin" @click="router.push('/styling')">Endre Styling</button>
   </nav>
   <nav
     class="navbar"
