@@ -1,10 +1,8 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { useId } from 'vue';
-import { useFirebaseStore } from '@/stores/firebaseStore';
+import { useFirebaseStore, type CalenderDay } from '@/stores/FirebaseStore';
 const firebaseStore = useFirebaseStore();
 const currentDay = firebaseStore.currentDate.toDate().getDate();
-import type { CalenderDay } from '@/stores/firebaseStore';
 import firebase from 'firebase/compat/app';
 
 const unlockLuke = (dayObj: CalenderDay, dayNum: number) => {
