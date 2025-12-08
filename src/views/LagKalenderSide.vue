@@ -1,7 +1,20 @@
 <script lang="ts" setup>
-// import { ref } from 'vue'
-import { useFirebaseStore } from '@/stores/firebaseStore'
+import { type CalenderDay, useFirebaseStore } from '@/stores/firebaseStore'
 const firebaseStore = useFirebaseStore()
+
+import { useFixLink } from "@/LinkConverter/LinkConverter.ts";
+
+const {linkConverter} = useFixLink();
+
+const updateKalender = () => {
+  Object.values(firebaseStore.julekalender as Record<string, CalenderDay>).forEach(item => {
+    if(item.video) {
+      item.video = linkConverter(item.video as string);
+    }
+  });
+
+  firebaseStore.updateJulekalender(firebaseStore.julekalender);
+}
 
 // const assignedLuker = ref([])
 </script>
@@ -12,48 +25,50 @@ const firebaseStore = useFirebaseStore()
       <h1>🎄 Lag kalenderen din! 🎄</h1>
       <p>Rediger innhold for hver dag i julekalenderen</p>
     </div>
-    
+
     <div class="calendar-grid">
       <div v-for="(value, index) in firebaseStore.julekalender" :key="index" class="day-card">
         <div class="day-content">
           <div class="day-header">
             <h3>📅 Dag {{ value.day }}</h3>
           </div>
-          
+
           <div class="input-group">
             <label>📝 Tekst:</label>
-            <textarea 
-              v-model="value.texts" 
+            <textarea
+              v-model="value.texts"
               placeholder="Skriv inn tekst for denne dagen..."
               rows="3"
             ></textarea>
           </div>
-          
+
           <div class="input-group">
             <label>🖼️ Bilde URL:</label>
-            <input 
-              v-model="value.image" 
-              type="text" 
-              placeholder="https://example.com/image.jpg" 
+            <input
+              v-model="value.image"
+              type="text"
+              placeholder="https://example.com/image.jpg"
             />
           </div>
-          
+
           <div class="input-group">
             <label>🎥 Video URL:</label>
-            <input 
-              v-model="value.video" 
-              type="text" 
-              placeholder="https://example.com/video.mp4" 
+            <input
+              v-model="value.video"
+              type="text"
+              placeholder="https://example.com/video.mp4"
+
+
             />
           </div>
         </div>
       </div>
     </div>
-    
+
     <div class="save-section">
-      <button 
-        class="save-btn" 
-        @click="firebaseStore.updateJulekalender(firebaseStore.julekalender)"
+      <button
+        class="save-btn"
+        @click="updateKalender"
       >
         💾 Lagre kalender
       </button>
@@ -190,11 +205,11 @@ textarea {
     padding: 1rem;
     padding-top: 80px;
   }
-  
+
   .calendar-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .header h1 {
     font-size: 2rem;
   }
