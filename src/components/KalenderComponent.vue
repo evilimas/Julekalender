@@ -91,7 +91,6 @@ const createId = (dagtall: number) => {
   border-radius: 0 0 20px 20px;
   overflow-wrap: break-word;
   max-height: 240px;
-  overflow-y: scroll;
 }
 
 .dag p {
@@ -102,6 +101,7 @@ const createId = (dagtall: number) => {
 
 .heightChange {
   height: 240px;
+  overflow-y: scroll;
 }
 
 .dag h3 {
