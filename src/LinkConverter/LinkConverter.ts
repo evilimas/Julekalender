@@ -7,7 +7,7 @@ export function useFixLink() {
       return "";
     }
 
-    return link.split('&')[0].replace('watch?v=', "embed/");
+    /*return link.split('&')[0].replace('watch?v=', "embed/");*/
   }
 
   return { linkConverter }
