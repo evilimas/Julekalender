@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import KalenderComponent from '@/components/KalenderComponent.vue';
+import { useFirebaseStore } from '@/stores/FirebaseStore';
+const firebaseStore = useFirebaseStore();
 </script>
 
 <template>
-    <div class="container">
+    <div class="container" :style="{ backgroundImage: `url(${firebaseStore.styleDocument?.backgroundImage || './src/images/hero.jpg'})` }">
         <div class="snow-container">
             <div class="snowflake" v-for="n in 150" :key="n"></div>
         </div>

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed, type ComputedRef } from 'vue'
+import { ref } from 'vue'
 import router from '@/router'
 import { auth } from '@/services/firebase'
 import type { User } from 'firebase/auth'
@@ -73,6 +73,16 @@ type CalenderDocument = {
   uid: string
 }
 
+type StyleDocument = {
+  id: string
+  backgroundImage: string
+  primaryColor: string
+  secondaryColor: string
+  textColor: string
+  createdAt: Timestamp | null
+  uid: string
+}
+
 const seedCalender = (): Calender => ({
   day1: { day: 1, texts: 'Day 1 content', opened: false, openable: false },
   day2: { day: 2, texts: 'Day 2 content', opened: false, openable: false },
@@ -109,6 +119,12 @@ export const useFirebaseStore = defineStore('firebase', () => {
   const isAdmin = ref<boolean>(false)
   const currentDate = Timestamp.fromDate(new Date())
 
+  // styling refs
+  const styleDocument = ref<StyleDocument | null>(null)
+  // const bgImage = ref<string>('')
+  // const primaryColor = ref<string>('')
+  // const secondaryColor = ref<string>('')
+
   onAuthStateChanged(auth, async (u) => {
     if (u) {
       user.value = u
@@ -116,6 +132,8 @@ export const useFirebaseStore = defineStore('firebase', () => {
       const idTokenResult = await u.getIdTokenResult(true)
       await fetchMainJulekalender()
       await updateOpenableStatus(new Date().getDate())
+      await fetchStyleDocument()
+      // await createStyledocument()
       isAdmin.value = idTokenResult.claims.admin === true
     } else {
       user.value = null
@@ -254,6 +272,43 @@ export const useFirebaseStore = defineStore('firebase', () => {
     }
   }
 
+  // update background and colors
+
+  // create style document for admin user
+
+  // const createStyledocument = async (): Promise<string> => {
+  //   const styleRef = await addDoc(collection(db, 'styles'), {
+  //     backgroundImage: bgImage.value,
+  //     primaryColor: primaryColor.value,
+  //     secondaryColor: secondaryColor.value,
+  //     createdAt: serverTimestamp(),
+  //     uid: auth.currentUser?.uid,
+  //   })
+  //   return styleRef.id
+  // }
+
+  // fetch style document
+
+  const fetchStyleDocument = async (): Promise<void> => {
+    if (!user.value?.uid) return
+    const q = query(collection(db, 'styles'), where('uid', '==', user.value.uid))
+    const querySnapshot = await getDocs(q)
+
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0]
+      styleDocument.value = { ...(doc?.data() as StyleDocument) }
+    }
+  }
+
+  // update style
+
+  const updateStyleValue = async (styleOption: string, newValue: string): Promise<void> => {
+    const q = query(collection(db, 'styles'), where('uid', '==', user.value?.uid))
+    const querySnapshot = await getDocs(q)
+    await updateDoc(querySnapshot.docs[0]!.ref, { [styleOption]: newValue })
+    await fetchStyleDocument()
+  }
+
   return {
     user,
     errorMsg,
@@ -267,5 +322,8 @@ export const useFirebaseStore = defineStore('firebase', () => {
     currentDate,
     isAdmin,
     updateJulekalender,
+    // styling
+    updateStyleValue,
+    styleDocument,
   }
 })
