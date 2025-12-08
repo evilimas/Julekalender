@@ -7,6 +7,7 @@
         const bgImage = ref<string>(firebaseStore.styleDocument?.backgroundImage || defaultBgImage);
         const primaryColor = ref<string>(firebaseStore.styleDocument?.primaryColor || '#ffffff');
         const secondaryColor = ref<string>(firebaseStore.styleDocument?.secondaryColor || '#000000');
+        const textColor = ref<string>(firebaseStore.styleDocument?.textColor || '#ffffff');
         const isUpdating = ref<boolean>(false);
         const message = ref<string>('');
         
@@ -55,6 +56,21 @@
             setTimeout(() => message.value = '', 3000);
           }
         };
+  
+        const updateText = async () => {
+          try {
+            isUpdating.value = true;
+            message.value = '';
+            await firebaseStore.updateTextColor(textColor.value);
+            message.value = 'Text color updated successfully! ✅';
+          } catch (error) {
+            message.value = 'Failed to update text color ❌';
+            console.error(error);
+          } finally {
+            isUpdating.value = false;
+            setTimeout(() => message.value = '', 3000);
+          }
+        };
       
       </script>
 <template>
@@ -67,7 +83,7 @@
             <p>Her kan du kan endre bakgrunns bilde og farger!</p>
         </div>
         
-        <!-- Status message -->
+
         <div v-if="message" class="message" :class="{ success: message.includes('✅'), error: message.includes('❌') }">
           {{ message }}
         </div>
@@ -76,7 +92,7 @@
             
             <div class="input">
                 <label for="bg-image">🖼️ Bakgrunns bilde URL:</label>
-                <input id="bg-image" type="text" v-model="bgImage" placeholder="https://example.com/background.jpg" :disabled="isUpdating" />
+                <input id="bg-image" type="text" v-model="bgImage" placeholder="https://example.com/background.jpg" />
                 <button @click="updateBackground" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
                 </button>
@@ -92,6 +108,13 @@
                 <label for="secondary-color">Sekundær farge:</label>
                 <input id="secondary-color" type="color" v-model="secondaryColor" :disabled="isUpdating"/>
                 <button @click="updateSecondary" :disabled="isUpdating">
+                  {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
+                </button>
+            </div>
+            <div class="input">
+                <label for="text-color">Tekst farge:</label>
+                <input id="text-color" type="color" v-model="textColor" :disabled="isUpdating"/>
+                <button @click="updateText" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
                 </button>
             </div>

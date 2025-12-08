@@ -78,6 +78,7 @@ type StyleDocument = {
   backgroundImage: string
   primaryColor: string
   secondaryColor: string
+  textColor: string
   createdAt: Timestamp | null
   uid: string
 }
@@ -335,6 +336,17 @@ export const useFirebaseStore = defineStore('firebase', () => {
     }
   }
 
+  // update text color
+  const updateTextColor = async (newTextColor: string): Promise<void> => {
+    const q = query(collection(db, 'styles'), where('uid', '==', user.value?.uid))
+    const querySnapshot = await getDocs(q)
+
+    if (!querySnapshot.empty) {
+      await updateDoc(querySnapshot.docs[0]!.ref, { textColor: newTextColor })
+      await fetchStyleDocument()
+    }
+  }
+
   return {
     user,
     errorMsg,
@@ -352,6 +364,7 @@ export const useFirebaseStore = defineStore('firebase', () => {
     updateBackgroundImage,
     updatePrimaryColor,
     updateSecondaryColor,
+    updateTextColor,
     styleDocument,
   }
 })
