@@ -94,7 +94,7 @@
         <div class="header">
             
             <h1>Styling Side</h1>
-            <p>Her kan du kan endre bakgrunns bilde og farger!</p>
+            <p>Her kan du endre bakgrunns bilde og farger!</p>
         </div>
         
 
