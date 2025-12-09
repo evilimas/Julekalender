@@ -78,7 +78,7 @@ const createId = (dagtall: number) => {
           Dag {{ day.day }}
         </h3>
         <button
-          :style="{ backgroundColor: `${firebaseStore.styleDocument?.secondaryColor || '#8298FC'}`, color: `${firebaseStore.styleDocument?.textColor || 'white'}` }"
+          :style="{ backgroundColor: `${firebaseStore.styleDocument?.secondaryColor || '#8298FC'}`, color: `${firebaseStore.styleDocument?.secondaryTextColor || 'white'}` }"
           @click="unlockLuke(day, day.day)">
           lås opp
         </button>

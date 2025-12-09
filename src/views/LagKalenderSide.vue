@@ -205,7 +205,8 @@ textarea {
 }
 
 .save-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+  background: #4CAF50;
   color: white;
   border: none;
   padding: 1rem 2.5rem;
@@ -220,6 +221,7 @@ textarea {
 .save-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  background-color: #45a049
 }
 
 .save-btn:active {
