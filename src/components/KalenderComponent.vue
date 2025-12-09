@@ -31,10 +31,10 @@ const unlockLuke = (dayObj: CalenderDay, dayNum: number) => {
 const updateOpenables = () => {
   for (const key in firebaseStore.julekalender) {
     const item = firebaseStore.julekalender[key as keyof typeof firebaseStore.julekalender];
-    if (item.day <= currentDay) {
-      item.openable = true;
+    if (item!.day <= currentDay) {
+      item!.openable = true;
     }
-    console.log(item.openable);
+    console.log(item!.openable);
   }
 }
 
@@ -42,8 +42,8 @@ const counts = () => {
   let openable = 0, opened = 0;
   for (const key in firebaseStore.julekalender) {
     const item = firebaseStore.julekalender[key as keyof typeof firebaseStore.julekalender];
-    if (item.openable) openable++;
-    if (item.opened) opened++;
+    if (item!.openable) openable++;
+    if (item!.opened) opened++;
   }
   return {
     openable,
@@ -54,7 +54,7 @@ const counts = () => {
 const closeAllLukes = () => {
   for (const key in firebaseStore.julekalender) {
     const item = firebaseStore.julekalender[key as keyof typeof firebaseStore.julekalender];
-    if (item.opened == true) item.opened = false;
+    if (item!.opened == true) item!.opened = false;
   }
 }
 
