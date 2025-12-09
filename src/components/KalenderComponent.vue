@@ -14,7 +14,7 @@ const unlockLuke = (dayObj: CalenderDay, dayNum: number) => {
 
   if (dayObj.openable) { //<-- dette burde være dayObj.openable!!
     if (dayObj.opened == true) {
-      getCurrentElementbutton!.innerHTML = "åpnet";
+      getCurrentElementbutton!.innerHTML = "åpne";
       //buttonTxt.value = "Open";
       dayObj.opened = false;
     }
@@ -23,13 +23,13 @@ const unlockLuke = (dayObj: CalenderDay, dayNum: number) => {
       dayObj.opened = true;
     }
   }
-  if (dayObj.openable == false){
-
+  if (dayObj.openable == false) {
+    console.log("well?")
   }
 }
 
 const updateOpenables = () => {
-  for (const key in firebaseStore.julekalender){
+  for (const key in firebaseStore.julekalender) {
     const item = firebaseStore.julekalender[key as keyof typeof firebaseStore.julekalender];
     if (item.day <= currentDay) {
       item.openable = true;
@@ -40,7 +40,7 @@ const updateOpenables = () => {
 
 const counts = () => {
   let openable = 0, opened = 0;
-  for (const key in firebaseStore.julekalender){
+  for (const key in firebaseStore.julekalender) {
     const item = firebaseStore.julekalender[key as keyof typeof firebaseStore.julekalender];
     if (item.openable) openable++;
     if (item.opened) opened++;
@@ -52,8 +52,7 @@ const counts = () => {
 }
 
 const closeAllLukes = () => {
-  let i = 0;
-  for (const key in firebaseStore.julekalender){
+  for (const key in firebaseStore.julekalender) {
     const item = firebaseStore.julekalender[key as keyof typeof firebaseStore.julekalender];
     if (item.opened == true) item.opened = false;
   }
@@ -72,8 +71,17 @@ const createId = (dagtall: number) => {
 
     <div v-for="(day, index) in firebaseStore.julekalender" :key="index">
       <div :id="createId(day.day)" class="dag" :class="{ heightChange: day.opened }">
-        <h3 :style="{ backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}` , color: `${firebaseStore.styleDocument?.textColor || 'white'}` }">Dag {{ day.day }}</h3>
-        <button :style="{ backgroundColor: `${firebaseStore.styleDocument?.secondaryColor || '#8298FC'}`, color: `${firebaseStore.styleDocument?.textColor || 'white'}` }" @click="unlockLuke(day, day.day)">lås opp</button> <!--:disabled="day.day > currentDay"--->
+        <h3 :style="{
+          backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}`,
+          color: `${firebaseStore.styleDocument?.textColor || 'white'}`
+        }" :class="{ smallerTitle: day.opened }">
+          Dag {{ day.day }}
+        </h3>
+        <button
+          :style="{ backgroundColor: `${firebaseStore.styleDocument?.secondaryColor || '#8298FC'}`, color: `${firebaseStore.styleDocument?.textColor || 'white'}` }"
+          @click="unlockLuke(day, day.day)">
+          lås opp
+        </button>
         <div v-show="day.opened">
           <p>{{ day.texts }}</p>
           <img :src="day.image" alt="Bilde for dagen" v-if="day.image" />
@@ -83,7 +91,9 @@ const createId = (dagtall: number) => {
         </div>
       </div>
     </div>
-    <div v-show="counts().opened > 1" class="closeAllDiv">
+  </div>
+  <div v-show="counts().opened > 1" class="closeAllDiv">
+    <div>
       <button @click="closeAllLukes" class="closeAllButton">Lukk alle</button>
     </div>
   </div>
@@ -92,10 +102,10 @@ const createId = (dagtall: number) => {
 <style scoped>
 .kalender {
   display: grid;
-  max-width: 1000px;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 10px;
-  margin: 0 auto;
+  max-width: 1200px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px 13px;
+  margin: auto;
   /* margin-top: 110px; */
 }
 
@@ -104,19 +114,21 @@ const createId = (dagtall: number) => {
   border: 1px solid #ccc;
   background: linear-gradient(to bottom, rgb(203, 239, 255, 0.3), rgb(60, 66, 133, 0.5));
   text-align: center;
-  border-radius: 0 0 20px 20px;
+  border-radius: 6px 6px 20px 20px;
   overflow-wrap: break-word;
   max-height: 240px;
+  overflow: hidden;
 }
 
 .dag p {
   background: linear-gradient(to bottom, rgb(184, 182, 175), rgb(226, 221, 205), rgb(232, 229, 220), white);
   background-clip: text;
+  padding: 5px;
   color: transparent;
 }
 
 .heightChange {
-  height: 240px;
+  min-height: 240px;
   overflow-y: scroll;
 }
 
@@ -125,6 +137,11 @@ const createId = (dagtall: number) => {
   color: white;
   padding: 10px;
   margin: 0;
+}
+
+.dag .smallerTitle {
+  padding: 6px;
+  font-size: .9rem;
 }
 
 .dag button {
@@ -143,7 +160,10 @@ const createId = (dagtall: number) => {
 }
 
 .closeAllDiv {
-  grid-column: 6 / 7;
+  display: grid;
+  max-width: 1200px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  margin: 0 auto;
   text-align: right;
 }
 
@@ -153,13 +173,17 @@ const createId = (dagtall: number) => {
   border-radius: 6px;
   border-color: rgb(173, 162, 135);
   border-style: outset;
-} .closeAllButton:hover { filter: brightness(0.9) contrast(1.05) saturate(1.1) hue-rotate(-10deg); }
+}
+
+.closeAllButton:hover {
+  filter: brightness(0.9) contrast(1.05) saturate(1.1) hue-rotate(-10deg);
+}
 
 .dag iframe,
 .dag img {
   padding: 4px 0;
-  height: 140px;
-  width: 120px;
+  height: 100px;
+  width: 80px;
   border-radius: 20px;
   object-fit: cover;
 }
