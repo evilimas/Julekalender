@@ -6,15 +6,15 @@ const currentDay = firebaseStore.currentDate.toDate().getDate();
 import firebase from 'firebase/compat/app';
 
 const unlockLuke = (dayObj: CalenderDay, dayNum: number) => {
-  const getCurrentElement = document.getElementById(`luke_${dayNum}`);
+  const getCurrentElement = document.getElementById(createId(dayObj.day));
   const getCurrentElementbutton = getCurrentElement?.getElementsByTagName("button")[0];
   // dayObj.openable !!!!
 
   updateOpenables();
 
-  if (dayObj.openable == true) { //<-- dette burde være dayObj.openable!!
+  if (dayObj.openable) { //<-- dette burde være dayObj.openable!!
     if (dayObj.opened == true) {
-      getCurrentElementbutton!.innerHTML = "åpne";
+      getCurrentElementbutton!.innerHTML = "åpnet";
       //buttonTxt.value = "Open";
       dayObj.opened = false;
     }
@@ -22,17 +22,33 @@ const unlockLuke = (dayObj: CalenderDay, dayNum: number) => {
       getCurrentElementbutton!.innerHTML = "lukk";
       dayObj.opened = true;
     }
-  } else {
-    getCurrentElement!.getElementsByTagName("div")[0]!.innerHTML += `<div>Å NO YOU DONT!!</div>`;
+  }
+  if (dayObj.openable == false){
+
   }
 }
 
 const updateOpenables = () => {
   for (const key in firebaseStore.julekalender){
     const item = firebaseStore.julekalender[key as keyof typeof firebaseStore.julekalender];
-    if (item.day <= currentDay) item.openable = true;
+    if (item.day <= currentDay) {
+      item.openable = true;
+    }
     console.log(item.openable);
   }
+}
+
+const counts = () => {
+  let openable = 0, opened = 0;
+  for (const key in firebaseStore.julekalender){
+    const item = firebaseStore.julekalender[key as keyof typeof firebaseStore.julekalender];
+    if (item.openable) openable++;
+    if (item.opened) opened++;
+  }
+  return {
+    openable,
+    opened
+  };
 }
 
 const closeAllLukes = () => {
@@ -52,9 +68,6 @@ const createId = (dagtall: number) => {
 })*/
 </script>
 <template>
-  <div>
-    <button @click="closeAllLukes" style="padding: 30px;">Lukk alle</button>
-  </div>
   <div class="kalender">
 
     <div v-for="(day, index) in firebaseStore.julekalender" :key="index">
@@ -69,6 +82,9 @@ const createId = (dagtall: number) => {
           </div>
         </div>
       </div>
+    </div>
+    <div v-show="counts().opened > 1" class="closeAllDiv">
+      <button @click="closeAllLukes" class="closeAllButton">Lukk alle</button>
     </div>
   </div>
 </template>
@@ -122,8 +138,22 @@ const createId = (dagtall: number) => {
 }
 
 .dag button:hover {
+  transform: scale(1.1);
   filter: hue-rotate(150deg) saturate(0.5) brightness(1.1);
 }
+
+.closeAllDiv {
+  grid-column: 6 / 7;
+  text-align: right;
+}
+
+.closeAllButton {
+  padding: 10px 30px;
+  background: linear-gradient(to right bottom, white, rgb(226, 220, 209), white, rgb(247, 239, 213), rgb(181, 171, 150));
+  border-radius: 6px;
+  border-color: rgb(173, 162, 135);
+  border-style: outset;
+} .closeAllButton:hover { filter: brightness(0.9) contrast(1.05) saturate(1.1) hue-rotate(-10deg); }
 
 .dag iframe,
 .dag img {
