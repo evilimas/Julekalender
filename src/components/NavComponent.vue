@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
 import { useRoute } from 'vue-router'
-import defaultAvatar from '@/images/default-avatar.jpeg'
 import { useFirebaseStore } from '@/stores/FirebaseStore'
 const firebaseStore = useFirebaseStore()
 const router = useRouter()
@@ -11,29 +10,22 @@ const route = useRoute()
 <template>
   <nav class="navbar" v-if="route.path == '/home'">
     
-    
     <div class="left-side">
-      
-      <button v-if="firebaseStore.isAdmin" @click="router.push('/lagkalender')">Lag Kalender</button>
-      <button v-if="firebaseStore.isAdmin" @click="router.push('/styling')">Endre Styling</button>
+      <button v-if="firebaseStore.isAdmin" @click="router.push('/lagkalender')">Lag Kalender <img src="@/images/calendar.png" alt="calender icon"  class="button-img"/></button>
+      <button v-if="firebaseStore.isAdmin" @click="router.push('/styling')">Endre Styling <img src="@/images/pencil.png" alt="color palette icon" class="button-img"></button>
     </div>
 
     <div class="right-side">
-
-      <img :src="defaultAvatar" alt="User Avatar" />
+      <img src="@/images/default-avatar.jpeg" alt="User Avatar" />
       <p>{{ firebaseStore.user?.displayName ? firebaseStore.user?.displayName : firebaseStore.user?.email }}</p>
-      <button @click="firebaseStore.signOutUser()">Logg ut</button>
+      <button @click="firebaseStore.signOutUser()">Logg ut <img src="@/images/no.png" alt="logout icon" class="button-img"/></button>
     </div>
   </nav>
   <nav
     class="navbar"
-    v-else-if="route.path !== '/login' && route.path !== '/register' && route.path !== '/'"
-  >
-    <!-- <button v-if="route.path.startsWith('/yatzy-mp/')" @click="router.push('/yatzy-mp')">
-      <v-icon name="bi-arrow-return-left" scale="0.7" /> Tilbake
-    </button> -->
+    v-else-if="route.path !== '/login' && route.path !== '/register' && route.path !== '/'">
     <button v-if="route.path !== '/kalender/:kalenderId'" @click="router.push('/home')">
-      Tilbake
+      Tilbake <img src="@/images/back.png" alt="tilbake icon" class="button-img"/>
     </button>
   </nav>
 </template>
@@ -95,5 +87,12 @@ p {
   display: flex;
   gap: 10px;
   align-items: center;
+}
+.button-img {
+  width: 22px;
+  height: 22px;
+  margin-left: 5px;
+  vertical-align: middle;
+  border-radius: 0;
 }
 </style>

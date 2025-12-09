@@ -1,19 +1,35 @@
 <script lang="ts" setup>
 import { type CalenderDay, useFirebaseStore } from '@/stores/FirebaseStore'
-const firebaseStore = useFirebaseStore()
-
+import { ref } from 'vue'
 import { useFixLink } from "@/LinkConverter/LinkConverter.ts";
+
+const isUpdating = ref<boolean>(false);
+const message = ref<string>('');
+const firebaseStore = useFirebaseStore()
 
 const {linkConverter} = useFixLink();
 
-const updateKalender = () => {
-  Object.values(firebaseStore.julekalender as Record<string, CalenderDay>).forEach(item => {
-    if(item.video) {
-      item.video = linkConverter(item.video as string);
-    }
-  });
+const updateKalender = async () => {
+  try {
+    Object.values(firebaseStore.julekalender as Record<string, CalenderDay>).forEach(item => {
+      if(item.video) {
+        item.video = linkConverter(item.video as string);
+      }
+    });
+    isUpdating.value = true;
+    message.value = '';
+    await firebaseStore.updateJulekalender(firebaseStore.julekalender);
+    message.value = 'Kalender oppdatert! ✅';
+  } catch (error) {
+    message.value = 'Oppdatering feilet ❌';
+    console.error(error);
+  } finally {
+    isUpdating.value = false;
+    setTimeout(() => message.value = '', 5000);
+  }
+  
 
-  firebaseStore.updateJulekalender(firebaseStore.julekalender);
+
 }
 
 // const assignedLuker = ref([])
@@ -67,12 +83,16 @@ const updateKalender = () => {
       </div>
     </div>
     
+    <div v-if="message" class="message" :class="{ success: message.includes('✅'), error: message.includes('❌') }">
+            {{ message }}
+          </div>
     <div class="save-section">
       <button
       class="save-btn"
+      :disabled="isUpdating"
       @click="updateKalender"
       >
-      💾 Lagre kalender
+      {{ isUpdating ? 'Oppdaterer...' : '💾 Lagre kalender' }}
     </button>
   </div>
 </div>
@@ -204,6 +224,31 @@ textarea {
 
 .save-btn:active {
   transform: translateY(0);
+}
+.message {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-weight: bold;
+    transition: opacity 0.3s ease;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 

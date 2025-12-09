@@ -20,6 +20,7 @@ watch(
 
 <template>
   <div class="login-view">
+    <h1>Jullekalender</h1>
     <section id="logged-out-view" v-if="loginPage">
       <h2>For å starte opne kalenderen, vennligst logg inn.</h2>
       <div class="container google">
@@ -104,6 +105,13 @@ watch(
   height: 100vh;
   background: rgb(168, 8, 8);
   color: #ffffff;
+}
+h1{
+  font-size: 4em;
+  margin-bottom: 0.5em;
+  background: linear-gradient(135deg, #6c61ff 0%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 h2{
   color: white;
