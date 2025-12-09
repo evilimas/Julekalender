@@ -59,8 +59,8 @@ const createId = (dagtall: number) => {
 
     <div v-for="(day, index) in firebaseStore.julekalender" :key="index">
       <div :id="createId(day.day)" class="dag" :class="{ heightChange: day.opened }">
-        <h3>Dag {{ day.day }}</h3>
-        <button @click="unlockLuke(day, day.day)">lås opp</button> <!--:disabled="day.day > currentDay"--->
+        <h3 :style="{ backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}` , color: `${firebaseStore.styleDocument?.textColor || 'white'}` }">Dag {{ day.day }}</h3>
+        <button :style="{ backgroundColor: `${firebaseStore.styleDocument?.secondaryColor || '#8298FC'}`, color: `${firebaseStore.styleDocument?.textColor || 'white'}` }" @click="unlockLuke(day, day.day)">lås opp</button> <!--:disabled="day.day > currentDay"--->
         <div v-show="day.opened">
           <p>{{ day.texts }}</p>
           <img :src="day.image" alt="Bilde for dagen" v-if="day.image" />
