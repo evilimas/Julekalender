@@ -5,7 +5,7 @@ const firebaseStore = useFirebaseStore();
 const currentDay = firebaseStore.currentDate.toDate().getDate();
 import firebase from 'firebase/compat/app';
 
-const unlockLuke = (dayObj: CalenderDay, dayNum: number) => {
+const unlockLuke = (dayObj: CalenderDay) => {
   const getCurrentElement = document.getElementById(createId(dayObj.day));
   const getCurrentElementbutton = getCurrentElement?.getElementsByTagName("button")[0];
   // dayObj.openable !!!!
@@ -79,7 +79,7 @@ const createId = (dagtall: number) => {
         </h3>
         <button
           :style="{ backgroundColor: `${firebaseStore.styleDocument?.secondaryColor || '#8298FC'}`, color: `${firebaseStore.styleDocument?.textColor || 'white'}` }"
-          @click="unlockLuke(day, day.day)">
+          @click="unlockLuke(day)">
           lås opp
         </button>
         <div v-show="day.opened">
