@@ -17,9 +17,9 @@
             isUpdating.value = true;
             message.value = '';
             await firebaseStore.updateStyleValue('backgroundImage', bgImage.value);
-            message.value = 'Background updated successfully! ✅';
+            message.value = 'Bakgrunns bilde oppdatert! ✅';
           } catch (error) {
-            message.value = 'Failed to update background ❌';
+            message.value = 'Bakgrunns bilde oppdatering feilet ❌';
             console.error(error);
           } finally {
             isUpdating.value = false;
@@ -32,9 +32,9 @@
             isUpdating.value = true;
             message.value = '';
             await firebaseStore.updateStyleValue('primaryColor', primaryColor.value);
-            message.value = 'Primary color updated successfully! ✅';
+            message.value = 'Primær farge oppdatert! ✅';
           } catch (error) {
-            message.value = 'Failed to update primary color ❌';
+            message.value = 'Primær farge oppdatering feilet ❌';
             console.error(error);
           } finally {
             isUpdating.value = false;
@@ -47,9 +47,9 @@
             isUpdating.value = true;
             message.value = '';
             await firebaseStore.updateStyleValue('secondaryColor', secondaryColor.value);
-            message.value = 'Secondary color updated successfully! ✅';
+            message.value = 'Sekundær farge oppdatert! ✅';
           } catch (error) {
-            message.value = 'Failed to update secondary color ❌';
+            message.value = 'Sekundær farge oppdatering feilet ❌';
             console.error(error);
           } finally {
             isUpdating.value = false;
@@ -62,9 +62,9 @@
             isUpdating.value = true;
             message.value = '';
             await firebaseStore.updateStyleValue('textColor', textColor.value);
-            message.value = 'Text color updated successfully! ✅';
+            message.value = 'Tekst farge oppdatert! ✅';
           } catch (error) {
-            message.value = 'Failed to update text color ❌';
+            message.value = 'Tekst farge oppdatering feilet ❌';
             console.error(error);
           } finally {
             isUpdating.value = false;
@@ -90,8 +90,9 @@
         
         <div class="inputs">
             
-            <div class="input">
+            <div class="input" >
                 <label for="bg-image">🖼️ Bakgrunns bilde URL:</label>
+                <p>Kalenders bakgrunns bilde</p>
                 <input id="bg-image" type="text" v-model="bgImage" placeholder="https://example.com/background.jpg" />
                 <button @click="updateBackground" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
@@ -99,6 +100,7 @@
             </div>
             <div class="input">
                 <label for="primary-color">Primær farge:</label>
+                <p>Farge for dager bakgrunn</p>
                 <input id="primary-color" type="color" v-model="primaryColor" :disabled="isUpdating"/>
                 <button @click="updatePrimary" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
@@ -106,6 +108,7 @@
             </div>
             <div class="input">
                 <label for="secondary-color">Sekundær farge:</label>
+                <p>Farge for knapper bakgrunn</p>
                 <input id="secondary-color" type="color" v-model="secondaryColor" :disabled="isUpdating"/>
                 <button @click="updateSecondary" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
@@ -113,6 +116,7 @@
             </div>
             <div class="input">
                 <label for="text-color">Tekst farge:</label>
+                <p>Tekst farge for dager og knapper</p>
                 <input id="text-color" type="color" v-model="textColor" :disabled="isUpdating"/>
                 <button @click="updateText" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
