@@ -122,6 +122,7 @@ const createId = (dagtall: number) => {
 }
 
 .dag button:hover {
+  transform: scale(1.1);
   filter: hue-rotate(150deg) saturate(0.5) brightness(1.1);
 }
 
