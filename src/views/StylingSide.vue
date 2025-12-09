@@ -1,7 +1,7 @@
       <script lang="ts" setup>
         import { ref } from 'vue';
         import { useFirebaseStore } from '@/stores/FirebaseStore';
-        
+
         const firebaseStore = useFirebaseStore();
         const defaultBgImage = "./src/images/hero.jpg";
         const bgImage = ref<string>(firebaseStore.styleDocument?.backgroundImage || defaultBgImage);
@@ -10,8 +10,8 @@
         const textColor = ref<string>(firebaseStore.styleDocument?.textColor || '#ffffff');
         const isUpdating = ref<boolean>(false);
         const message = ref<string>('');
-        
-        
+
+
         const updateBackground = async () => {
           try {
             isUpdating.value = true;
@@ -26,7 +26,7 @@
             setTimeout(() => message.value = '', 3000);
           }
         };
-        
+
         const updatePrimary = async () => {
           try {
             isUpdating.value = true;
@@ -41,7 +41,7 @@
             setTimeout(() => message.value = '', 3000);
           }
         };
-        
+
         const updateSecondary = async () => {
           try {
             isUpdating.value = true;
@@ -56,7 +56,7 @@
             setTimeout(() => message.value = '', 3000);
           }
         };
-  
+
         const updateText = async () => {
           try {
             isUpdating.value = true;
@@ -71,25 +71,25 @@
             setTimeout(() => message.value = '', 3000);
           }
         };
-      
+
       </script>
 <template>
   <div class="container">
     <div class="content">
 
         <div class="header">
-            
+
             <h1>Styling Side</h1>
             <p>Her kan du endre bakgrunns bilde og farger!</p>
-        </div> 
-        
+        </div>
+
 
         <div v-if="message" class="message" :class="{ success: message.includes('✅'), error: message.includes('❌') }">
           {{ message }}
         </div>
-        
+
         <div class="inputs">
-            
+
             <div class="input" >
                 <label for="bg-image">🖼️ Bakgrunns bilde URL:</label>
                 <p>Kalenders bakgrunns bilde</p>
@@ -100,7 +100,7 @@
             </div>
             <div class="input">
                 <label for="primary-color">Primær farge:</label>
-                <p>Farge for dager bakgrunn</p>
+                <p>Overskriftsbakgrunn (luker)</p>
                 <input id="primary-color" type="color" v-model="primaryColor" :disabled="isUpdating"/>
                 <button @click="updatePrimary" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
@@ -108,7 +108,7 @@
             </div>
             <div class="input">
                 <label for="secondary-color">Sekundær farge:</label>
-                <p>Farge for knapper bakgrunn</p>
+                <p>Knappfargebakgrunn</p>
                 <input id="secondary-color" type="color" v-model="secondaryColor" :disabled="isUpdating"/>
                 <button @click="updateSecondary" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
@@ -116,7 +116,7 @@
             </div>
             <div class="input">
                 <label for="text-color">Tekst farge:</label>
-                <p>Tekst farge for dager og knapper</p>
+                <p>Luketekstfarge</p>
                 <input id="text-color" type="color" v-model="textColor" :disabled="isUpdating"/>
                 <button @click="updateText" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
@@ -125,7 +125,7 @@
         </div>
     </div>
 
-    
+
   </div>
 </template>
 
@@ -133,7 +133,7 @@
 <style scoped>
     .container {
   padding: 2rem;
-  
+
   margin: 0 auto;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
