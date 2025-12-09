@@ -58,7 +58,7 @@ type StyleDocument = {
   uid: string
 }
 
-/*const createCalendar = () => {
+const createCalendar = () => {
   const totalDays = 24;
   const startIndex = 0;
   const calendar: Calender = {}
@@ -72,7 +72,7 @@ type StyleDocument = {
     }
   }
   return calendar;
-}*/
+}
 
 export const useFirebaseStore = defineStore('firebase', () => {
   const db = getFirestore()
