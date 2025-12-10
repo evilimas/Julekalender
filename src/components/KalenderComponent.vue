@@ -79,7 +79,7 @@ const createId = (dagtall: number) => {
         </h3>
         <button
           :style="{ backgroundColor: `${firebaseStore.styleDocument?.secondaryColor || '#8298FC'}`, color: `${firebaseStore.styleDocument?.secondaryTextColor || 'white'}` }"
-          @click="unlockLuke(day, day.day)">
+          @click="unlockLuke(day)">
           lås opp
         </button>
         <div v-show="day.opened">
