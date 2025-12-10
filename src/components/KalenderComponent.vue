@@ -37,12 +37,16 @@ const unlockLuke = (dayObj: CalenderDay) => {
     if (!doesNisseExist()) {
       const nisseDiv = document.createElement("div");
       nisseDiv.setAttribute("class", "nisse");
-      nisseDiv.innerHTML = `supposed to be a nisseanimasjon her`;
+      nisseDiv.innerHTML = /*HTML*/`
+        <img src="../assets/marsipan_nisse_anim.gif" alt="Sinna nisse som faller">
+      `;
       getCurrentElement?.appendChild(nisseDiv);
 
+      /*
       const myTimeOut = setTimeout(() => {
         getCurrentElement?.removeChild(nisseDiv);
       }, 5000);
+      */
     }
 
   }
@@ -97,24 +101,32 @@ onBeforeMount(() => {
       <ConfettiExplosion v-if="day.opened" :duration="3500" :particleCount="300"
         :colors="['#ff0000', '#efbf04', '#FFFFFF']" />
       <div :id="createId(day.day)" class="dag" :class="{ heightChange: day.opened }">
-        <h3 :style="{
-          backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}`,
-          color: `${firebaseStore.styleDocument?.textColor || 'white'}`
-        }" :class="{ smallerTitle: day.opened }">
-          Dag {{ day.day }}
-        </h3>
-        <button
-          :style="{ backgroundColor: `${firebaseStore.styleDocument?.secondaryColor || '#8298FC'}`, color: `${firebaseStore.styleDocument?.secondaryTextColor || 'white'}` }"
-          @click="unlockLuke(day)">
-          lås opp
-        </button>
-        <div v-show="day.opened">
-          <p :style="{ color: `${firebaseStore.styleDocument?.messageColor || '#000000'}` }">{{ day.texts }}</p>
-          <img :src="day.image" alt="Bilde for dagen" v-if="day.image" />
-          <div v-if="day.video">
-            <iframe :src="day.video"></iframe>
+        <div>
+          <h3 :style="{
+            backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}`,
+            color: `${firebaseStore.styleDocument?.textColor || 'white'}`
+          }" :class="{ smallerTitle: day.opened }">
+            Dag {{ day.day }}
+          </h3>
+          <button
+            :style="{ backgroundColor: `${firebaseStore.styleDocument?.secondaryColor || '#8298FC'}`, color: `${firebaseStore.styleDocument?.secondaryTextColor || 'white'}` }"
+            @click="unlockLuke(day)">
+            lås opp
+          </button>
+          <div v-show="day.opened">
+            <p :style="{ color: `${firebaseStore.styleDocument?.messageColor || '#ffff'}` }">{{ day.texts }}</p>
+            <img :src="day.image" alt="Bilde for dagen" v-if="day.image" />
+            <div v-if="day.video">
+              <iframe :src="day.video"></iframe>
+            </div>
           </div>
         </div>
+        <!--
+        <div class="nisse">
+          <img src="../assets/marsipan_nisse_anim.gif" alt="Sinna nisse som faller">
+        </div>
+
+        --->
       </div>
     </div>
   </div>
@@ -147,13 +159,21 @@ onBeforeMount(() => {
   min-height: 110px;
   overflow: hidden;
   position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.dag > div {
+  grid-row-start: 1;
+  grid-column-start: 1;
 }
 
 .dag p {
-  background: linear-gradient(to bottom, rgb(184, 182, 175), rgb(226, 221, 205), rgb(232, 229, 220), white);
-  background-clip: text;
+  /*background: linear-gradient(to bottom, rgb(184, 182, 175), rgb(226, 221, 205), rgb(232, 229, 220), white);*/
+  /*background-clip: text;*/
   padding: 5px;
-  color: transparent;
+  color: silver;
+  /*color: transparent;*/
 }
 
 .heightChange {
@@ -231,5 +251,10 @@ onBeforeMount(() => {
   border: none;
   border-radius: 15px;
   margin-top: 10px;
+}
+
+.nisse img {
+  width: 100%;
+  height: auto;
 }
 </style>
