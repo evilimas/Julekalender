@@ -9,6 +9,15 @@ import ConfettiExplosion from "vue-confetti-explosion";
 const unlockLuke = (dayObj: CalenderDay) => {
   const getCurrentElement = document.getElementById(createId(dayObj.day));
   const getCurrentElementbutton = getCurrentElement?.getElementsByTagName("button")[0];
+  const doesNisseExist = () => {
+    const classArr = [];
+    const kids = getCurrentElement?.children;
+
+    for (let i = 0; i < kids!.length; i++) {
+      classArr.push(kids![i]!.className);
+    }
+    return classArr.includes("nisse");
+  }
   // dayObj.openable !!!!
 
   if (dayObj.openable) { //<-- dette burde være dayObj.openable!!
@@ -25,10 +34,21 @@ const unlockLuke = (dayObj: CalenderDay) => {
   if (dayObj.openable == false) {
     console.log("not allowed!! nisse for you");
 
-    const nisseDiv = document.createElement("div");
-    nisseDiv.setAttribute("class", "nisse");
-    nisseDiv.innerHTML = `supposed to be a nisseanimasjon her`;
-    getCurrentElement?.appendChild(nisseDiv);
+    if (!doesNisseExist()) {
+      const nisseDiv = document.createElement("div");
+      nisseDiv.setAttribute("class", "nisse");
+      nisseDiv.innerHTML = /*HTML*/`
+        <img src="../assets/marsipan_nisse_anim.gif" alt="Sinna nisse som faller">
+      `;
+      getCurrentElement?.appendChild(nisseDiv);
+
+      /*
+      const myTimeOut = setTimeout(() => {
+        getCurrentElement?.removeChild(nisseDiv);
+      }, 5000);
+      */
+    }
+
   }
 
   console.log("openable: ", counts().openable, "opened: ", counts().opened);
@@ -78,32 +98,35 @@ onBeforeMount(() => {
   <div class="kalender">
 
     <div v-for="(day, index) in firebaseStore.julekalender" :key="index">
-      <ConfettiExplosion
-        v-if="day.opened"
-        :duration="3500"
-        :particleCount="300"
-        :colors="['#ff0000', '#efbf04', '#FFFFFF']"
-      />
-      <div :id="createId(day.day)" class="dag" :class="{ heightChange: day.opened }"
-      :style="{fontFamily: firebaseStore.styleDocument?.fontFamily || 'arial'}">
-        <h3 :style="{
-          backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}`,
-          color: `${firebaseStore.styleDocument?.textColor || 'white'}`
-        }" :class="{ smallerTitle: day.opened }">
-          Dag {{ day.day }}
-        </h3>
-        <button
-          :style="{ backgroundColor: `${firebaseStore.styleDocument?.secondaryColor || '#8298FC'}`, color: `${firebaseStore.styleDocument?.secondaryTextColor || 'white'}` }"
-          @click="unlockLuke(day)">
-          lås opp
-        </button>
-        <div v-show="day.opened">
-          <p :style="{ color: `${firebaseStore.styleDocument?.messageColor || '#000000'}` }">{{ day.texts }}</p>
-          <img :src="day.image" alt="Bilde for dagen" v-if="day.image" />
-          <div v-if="day.video">
-            <iframe :src="day.video"></iframe>
+      <ConfettiExplosion v-if="day.opened" :duration="3500" :particleCount="300"
+        :colors="['#ff0000', '#efbf04', '#FFFFFF']" />
+      <div :id="createId(day.day)" class="dag" :class="{ heightChange: day.opened }">
+        <div>
+          <h3 :style="{
+            backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}`,
+            color: `${firebaseStore.styleDocument?.textColor || 'white'}`
+          }" :class="{ smallerTitle: day.opened }">
+            Dag {{ day.day }}
+          </h3>
+          <button
+            :style="{ backgroundColor: `${firebaseStore.styleDocument?.secondaryColor || '#8298FC'}`, color: `${firebaseStore.styleDocument?.secondaryTextColor || 'white'}` }"
+            @click="unlockLuke(day)">
+            lås opp
+          </button>
+          <div v-show="day.opened">
+            <p :style="{ color: `${firebaseStore.styleDocument?.messageColor || '#ffff'}` }">{{ day.texts }}</p>
+            <img :src="day.image" alt="Bilde for dagen" v-if="day.image" />
+            <div v-if="day.video">
+              <iframe :src="day.video"></iframe>
+            </div>
           </div>
         </div>
+        <!--
+        <div class="nisse">
+          <img src="../assets/marsipan_nisse_anim.gif" alt="Sinna nisse som faller">
+        </div>
+
+        --->
       </div>
     </div>
   </div>
@@ -136,13 +159,21 @@ onBeforeMount(() => {
   min-height: 110px;
   overflow: hidden;
   position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.dag > div {
+  grid-row-start: 1;
+  grid-column-start: 1;
 }
 
 .dag p {
-  background: linear-gradient(to bottom, rgb(184, 182, 175), rgb(226, 221, 205), rgb(232, 229, 220), white);
-  background-clip: text;
+  /*background: linear-gradient(to bottom, rgb(184, 182, 175), rgb(226, 221, 205), rgb(232, 229, 220), white);*/
+  /*background-clip: text;*/
   padding: 5px;
-  color: transparent;
+  color: silver;
+  /*color: transparent;*/
 }
 
 .heightChange {
@@ -151,7 +182,9 @@ onBeforeMount(() => {
   width: 200px;
   overflow-y: auto;
   z-index: 10;
-}.dag h3 {
+}
+
+.dag h3 {
   background-color: maroon;
   color: white;
   padding: 10px;
@@ -198,7 +231,7 @@ onBeforeMount(() => {
   filter: brightness(0.9) contrast(1.05) saturate(1.1) hue-rotate(-10deg);
 }
 
-.dag iframe{
+.dag iframe {
   width: 100%;
   height: 200px;
   border: none;
@@ -218,5 +251,10 @@ onBeforeMount(() => {
   border: none;
   border-radius: 15px;
   margin-top: 10px;
+}
+
+.nisse img {
+  width: 100%;
+  height: auto;
 }
 </style>

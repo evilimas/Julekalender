@@ -1,12 +1,9 @@
       <script lang="ts" setup>
-      import { onMounted, ref } from 'vue'
+        import { ref } from 'vue';
         import { useFirebaseStore } from '@/stores/FirebaseStore';
-      const store = useFirebaseStore();
-      import firebase from 'firebase/compat/app'
 
         const firebaseStore = useFirebaseStore();
-        const defaultBgImage = "./src/images/hero.jpg";
-        const bgImage = ref<string>(firebaseStore.styleDocument?.backgroundImage || defaultBgImage);
+        const bgImage = ref<string>(firebaseStore.styleDocument?.backgroundImage || "https://fcr.travel/wp-content/uploads/slider/cache/ade9b4727b7ec40d611a0c5a5b8fb3a6/30-3.jpg");
         const primaryColor = ref<string>(firebaseStore.styleDocument?.primaryColor || '#ffffff');
         const secondaryColor = ref<string>(firebaseStore.styleDocument?.secondaryColor || '#000000');
         const textColor = ref<string>(firebaseStore.styleDocument?.textColor || '#ffffff');
@@ -28,119 +25,17 @@
           "Mountains of Christmas",
           "Mynerve",
           "Rubik",
-          "Bitcount Prop Single"
         ]);
 
 
-        /*const loadGoogleFonts = async (fonts : string[]) => {
-          const fontLink = document.createElement('link');
-
-          const fontFamilies = fonts.map(font => `${font}:wght@400`)
-
-          /!*fontLink.href = `https://fonts.googleapis.com/css?family=${fonts.join('&family=')}&display=swap`;*!/
-          fontLink.href = `https://fonts.googleapis.com/css?family=${fontFamilies.join('&family=')}&display=swap`;
-
-          fontLink.rel = 'stylesheet';
-          document.head.appendChild(fontLink);
-        }*/
-
-        const updateBackground = async () => {
+        const updateStyle = async (styleOption : string, newStyle: string, styleText:string) => {
           try {
             isUpdating.value = true;
             message.value = '';
-            await firebaseStore.updateStyleValue('backgroundImage', bgImage.value);
-            message.value = 'Bakgrunns bilde oppdatert! ✅';
+            await firebaseStore.updateStyleValue(styleOption, newStyle);
+            message.value = `${styleText} oppdatert ✅`;
           } catch (error) {
-            message.value = 'Bakgrunns bilde oppdatering feilet ❌';
-            console.error(error);
-          } finally {
-            isUpdating.value = false;
-            setTimeout(() => message.value = '', 3000);
-          }
-        };
-
-        const updatePrimary = async () => {
-          try {
-            isUpdating.value = true;
-            message.value = '';
-            await firebaseStore.updateStyleValue('primaryColor', primaryColor.value);
-            message.value = 'Primær farge oppdatert! ✅';
-          } catch (error) {
-            message.value = 'Primær farge oppdatering feilet ❌';
-            console.error(error);
-          } finally {
-            isUpdating.value = false;
-            setTimeout(() => message.value = '', 3000);
-          }
-        };
-
-        const updateSecondary = async () => {
-          try {
-            isUpdating.value = true;
-            message.value = '';
-            await firebaseStore.updateStyleValue('secondaryColor', secondaryColor.value);
-            message.value = 'Sekundær farge oppdatert! ✅';
-          } catch (error) {
-            message.value = 'Sekundær farge oppdatering feilet ❌';
-            console.error(error);
-          } finally {
-            isUpdating.value = false;
-            setTimeout(() => message.value = '', 3000);
-          }
-        };
-
-        const updateText = async () => {
-          try {
-            isUpdating.value = true;
-            message.value = '';
-            await firebaseStore.updateStyleValue('textColor', textColor.value);
-            message.value = 'Tekst farge oppdatert! ✅';
-          } catch (error) {
-            message.value = 'Tekst farge oppdatering feilet ❌';
-            console.error(error);
-          } finally {
-            isUpdating.value = false;
-            setTimeout(() => message.value = '', 3000);
-          }
-        };
-        const updateSecondaryText = async () => {
-          try {
-            isUpdating.value = true;
-            message.value = '';
-            await firebaseStore.updateStyleValue('secondaryTextColor', secondaryTextColor.value);
-            message.value = 'Tekst farge oppdatert! ✅';
-          } catch (error) {
-            message.value = 'Tekst farge oppdatering feilet ❌';
-            console.error(error);
-          } finally {
-            isUpdating.value = false;
-            setTimeout(() => message.value = '', 3000);
-          }
-        };
-        const updateMessageColor = async () => {
-          try {
-            isUpdating.value = true;
-            message.value = '';
-            await firebaseStore.updateStyleValue('messageColor', messageColor.value);
-            message.value = 'Tekst farge oppdatert! ✅';
-          } catch (error) {
-            message.value = 'Tekst farge oppdatering feilet ❌';
-            console.error(error);
-          } finally {
-            isUpdating.value = false;
-            setTimeout(() => message.value = '', 3000);
-          }
-        };
-
-        const updateFont = async () => {
-          try {
-            isUpdating.value = true;
-            message.value = '';
-            await firebaseStore.updateStyleValue('fontFamily', fontFamily.value);
-            message.value = 'Font oppdatert ✅';
-            /*await firebaseStore.loadGoogleFonts([fontFamily.value]);*/
-          } catch (error) {
-            message.value = 'Font oppdatering feilet ❌';
+            message.value = `${styleText} oppdatering feilet ❌`;
             console.error(error);
           } finally {
             isUpdating.value = false;
@@ -148,10 +43,6 @@
           }
         }
 
-
-        onMounted(() => {
-         store.loadGoogleFonts(availableFonts.value);
-        })
       </script>
 <template>
   <div class="container">
@@ -174,7 +65,7 @@
                 <label for="bg-image">🖼️ Bakgrunns bilde URL:</label>
                 <p>Kalenders bakgrunns bilde</p>
                 <input id="bg-image" type="text" v-model="bgImage" placeholder="https://example.com/background.jpg" />
-                <button @click="updateBackground" :disabled="isUpdating">
+                <button @click="updateStyle('backgroundImage', bgImage, 'Bakgrunns bilde')" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
                 </button>
             </div>
@@ -182,7 +73,7 @@
                 <label for="primary-color">Primær farge:</label>
                 <p>Overskriftsbakgrunn (luker)</p>
                 <input id="primary-color" type="color" v-model="primaryColor" :disabled="isUpdating"/>
-                <button @click="updatePrimary" :disabled="isUpdating">
+                <button @click="updateStyle('primaryColor', primaryColor, 'Primær farge')" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
                 </button>
             </div>
@@ -190,7 +81,7 @@
                 <label for="secondary-color">Sekundær farge:</label>
                 <p>Knappfargebakgrunn</p>
                 <input id="secondary-color" type="color" v-model="secondaryColor" :disabled="isUpdating"/>
-                <button @click="updateSecondary" :disabled="isUpdating">
+                <button @click="updateStyle('secondaryColor', secondaryColor, 'Sekundær farge')" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
                 </button>
             </div>
@@ -198,7 +89,7 @@
                 <label for="text-color">Primær tekst farge:</label>
                 <p>Luketekstfarge</p>
                 <input id="text-color" type="color" v-model="textColor" :disabled="isUpdating"/>
-                <button @click="updateText" :disabled="isUpdating">
+                <button @click="updateStyle('textColor', textColor, 'Primær tekst farge')" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
                 </button>
             </div>
@@ -206,7 +97,7 @@
                 <label for="text-color">Sekundær tekst farge:</label>
                 <p>Knapptekstfarge</p>
                 <input id="secondary-text-color" type="color" v-model="secondaryTextColor" :disabled="isUpdating"/>
-                <button @click="updateSecondaryText" :disabled="isUpdating">
+                <button @click="updateStyle('secondaryTextColor', secondaryTextColor, 'Sekundær tekst farge')" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
                 </button>
             </div>
@@ -214,7 +105,7 @@
                 <label for="text-color">Luke melding farge:</label>
                 <p>Luke melding farge</p>
                 <input id="message-text-color" type="color" v-model="messageColor" :disabled="isUpdating"/>
-                <button @click="updateMessageColor" :disabled="isUpdating">
+                <button @click="updateStyle('messageColor', messageColor, 'Luke melding farge')" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
                 </button>
             </div>
@@ -226,7 +117,7 @@
                 {{font}}
               </option>
             </select>
-            <button @click="updateFont" :disabled="isUpdating">
+            <button @click="updateStyle('fontFamily', fontFamily, 'Font')" :disabled="isUpdating">
               {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
             </button>
           </div>
