@@ -4,6 +4,7 @@ import { useFirebaseStore, type CalenderDay } from '@/stores/FirebaseStore';
 const firebaseStore = useFirebaseStore();
 const currentDay = firebaseStore.currentDate.toDate().getDate();
 import firebase from 'firebase/compat/app';
+import ConfettiExplosion from "vue-confetti-explosion";
 
 const unlockLuke = (dayObj: CalenderDay) => {
   const getCurrentElement = document.getElementById(createId(dayObj.day));
@@ -70,6 +71,12 @@ const createId = (dagtall: number) => {
   <div class="kalender">
 
     <div v-for="(day, index) in firebaseStore.julekalender" :key="index">
+      <ConfettiExplosion
+        v-if="day.opened"
+        :duration="3500"
+        :particleCount="400"
+        :colors="['#ff0000', '#efbf04', '#FFFFFF']"
+      />
       <div :id="createId(day.day)" class="dag" :class="{ heightChange: day.opened }">
         <h3 :style="{
           backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}`,
