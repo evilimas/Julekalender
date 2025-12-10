@@ -9,6 +9,15 @@ import ConfettiExplosion from "vue-confetti-explosion";
 const unlockLuke = (dayObj: CalenderDay) => {
   const getCurrentElement = document.getElementById(createId(dayObj.day));
   const getCurrentElementbutton = getCurrentElement?.getElementsByTagName("button")[0];
+  const doesNisseExist = () => {
+    const classArr = [];
+    const kids = getCurrentElement?.children;
+
+    for (let i = 0; i < kids!.length; i++) {
+      classArr.push(kids![i]!.className);
+    }
+    return classArr.includes("nisse");
+  }
   // dayObj.openable !!!!
 
   if (dayObj.openable) { //<-- dette burde være dayObj.openable!!
@@ -25,10 +34,17 @@ const unlockLuke = (dayObj: CalenderDay) => {
   if (dayObj.openable == false) {
     console.log("not allowed!! nisse for you");
 
-    const nisseDiv = document.createElement("div");
-    nisseDiv.setAttribute("class", "nisse");
-    nisseDiv.innerHTML = `supposed to be a nisseanimasjon her`;
-    getCurrentElement?.appendChild(nisseDiv);
+    if (!doesNisseExist()) {
+      const nisseDiv = document.createElement("div");
+      nisseDiv.setAttribute("class", "nisse");
+      nisseDiv.innerHTML = `supposed to be a nisseanimasjon her`;
+      getCurrentElement?.appendChild(nisseDiv);
+
+      const myTimeOut = setTimeout(() => {
+        getCurrentElement?.removeChild(nisseDiv);
+      }, 5000);
+    }
+
   }
 
   console.log("openable: ", counts().openable, "opened: ", counts().opened);
@@ -78,12 +94,8 @@ onBeforeMount(() => {
   <div class="kalender">
 
     <div v-for="(day, index) in firebaseStore.julekalender" :key="index">
-      <ConfettiExplosion
-        v-if="day.opened"
-        :duration="3500"
-        :particleCount="300"
-        :colors="['#ff0000', '#efbf04', '#FFFFFF']"
-      />
+      <ConfettiExplosion v-if="day.opened" :duration="3500" :particleCount="300"
+        :colors="['#ff0000', '#efbf04', '#FFFFFF']" />
       <div :id="createId(day.day)" class="dag" :class="{ heightChange: day.opened }">
         <h3 :style="{
           backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}`,
@@ -150,7 +162,9 @@ onBeforeMount(() => {
   width: 200px;
   overflow-y: auto;
   z-index: 10;
-}.dag h3 {
+}
+
+.dag h3 {
   background-color: maroon;
   color: white;
   padding: 10px;
@@ -197,7 +211,7 @@ onBeforeMount(() => {
   filter: brightness(0.9) contrast(1.05) saturate(1.1) hue-rotate(-10deg);
 }
 
-.dag iframe{
+.dag iframe {
   width: 100%;
   height: 200px;
   border: none;
