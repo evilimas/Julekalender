@@ -9,6 +9,7 @@
         const secondaryColor = ref<string>(firebaseStore.styleDocument?.secondaryColor || '#000000');
         const textColor = ref<string>(firebaseStore.styleDocument?.textColor || '#ffffff');
         const secondaryTextColor = ref<string>(firebaseStore.styleDocument?.secondaryTextColor || '#000000');
+        const messageColor = ref<string>(firebaseStore.styleDocument?.messageColor || '#000000');
         const isUpdating = ref<boolean>(false);
         const message = ref<string>('');
 
@@ -86,6 +87,20 @@
             setTimeout(() => message.value = '', 3000);
           }
         };
+        const updateMessageColor = async () => {
+          try {
+            isUpdating.value = true;
+            message.value = '';
+            await firebaseStore.updateStyleValue('messageColor', messageColor.value);
+            message.value = 'Tekst farge oppdatert! ✅';
+          } catch (error) {
+            message.value = 'Tekst farge oppdatering feilet ❌';
+            console.error(error);
+          } finally {
+            isUpdating.value = false;
+            setTimeout(() => message.value = '', 3000);
+          }
+        };
 
       </script>
 <template>
@@ -142,6 +157,14 @@
                 <p>Knapptekstfarge</p>
                 <input id="secondary-text-color" type="color" v-model="secondaryTextColor" :disabled="isUpdating"/>
                 <button @click="updateSecondaryText" :disabled="isUpdating">
+                  {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
+                </button>
+            </div>
+            <div class="input">
+                <label for="text-color">Luke melding farge:</label>
+                <p>Luke melding farge</p>
+                <input id="message-text-color" type="color" v-model="messageColor" :disabled="isUpdating"/>
+                <button @click="updateMessageColor" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
                 </button>
             </div>
