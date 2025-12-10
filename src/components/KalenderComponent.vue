@@ -78,12 +78,12 @@ const createId = (dagtall: number) => {
           Dag {{ day.day }}
         </h3>
         <button
-          :style="{ backgroundColor: `${firebaseStore.styleDocument?.secondaryColor || '#8298FC'}`, color: `${firebaseStore.styleDocument?.textColor || 'white'}` }"
-          @click="unlockLuke(day)">
+          :style="{ backgroundColor: `${firebaseStore.styleDocument?.secondaryColor || '#8298FC'}`, color: `${firebaseStore.styleDocument?.secondaryTextColor || 'white'}` }"
+          @click="unlockLuke(day, day.day)">
           lås opp
         </button>
         <div v-show="day.opened">
-          <p>{{ day.texts }}</p>
+          <p :style="{ color: `${firebaseStore.styleDocument?.messageColor || '#000000'}` }">{{ day.texts }}</p>
           <img :src="day.image" alt="Bilde for dagen" v-if="day.image" />
           <div v-if="day.video">
             <iframe :src="day.video"></iframe>
@@ -104,7 +104,8 @@ const createId = (dagtall: number) => {
   display: grid;
   max-width: 1200px;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 10px 13px;
+  gap: 22px 27px;
+  /* gap: 40px; */
   margin: auto;
   /* margin-top: 110px; */
 }
@@ -116,8 +117,10 @@ const createId = (dagtall: number) => {
   text-align: center;
   border-radius: 6px 6px 20px 20px;
   overflow-wrap: break-word;
-  max-height: 240px;
+  height: auto;
+  min-height: 110px;
   overflow: hidden;
+  position: relative;
 }
 
 .dag p {
@@ -128,11 +131,12 @@ const createId = (dagtall: number) => {
 }
 
 .heightChange {
-  min-height: 240px;
-  overflow-y: scroll;
-}
-
-.dag h3 {
+  min-height: 250px;
+  max-height: 400px;
+  width: 200px;
+  overflow-y: auto;
+  z-index: 10;
+}.dag h3 {
   background-color: maroon;
   color: white;
   padding: 10px;
@@ -179,12 +183,25 @@ const createId = (dagtall: number) => {
   filter: brightness(0.9) contrast(1.05) saturate(1.1) hue-rotate(-10deg);
 }
 
-.dag iframe,
+.dag iframe{
+  width: 100%;
+  height: 200px;
+  border: none;
+  border-radius: 15px;
+  margin-top: 10px;
+}
+
 .dag img {
-  padding: 4px 0;
+  /* padding: 4px 0;
   height: 100px;
   width: 80px;
   border-radius: 20px;
-  object-fit: cover;
+  object-fit: cover; */
+  width: 100%;
+  max-width: 200px;
+  height: 200px;
+  border: none;
+  border-radius: 15px;
+  margin-top: 10px;
 }
 </style>

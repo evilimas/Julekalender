@@ -54,13 +54,15 @@ type StyleDocument = {
   primaryColor: string
   secondaryColor: string
   textColor: string
+  secondaryTextColor: string
+  messageColor: string
   createdAt: Timestamp | null
   uid: string
 }
 
 const createCalendar = () => {
-  const totalDays = 24;
-  const startIndex = 0;
+  const totalDays = 24
+  const startIndex = 0
   const calendar: Calender = {}
 
   for (let i = startIndex; i < totalDays; i++) {
@@ -71,7 +73,7 @@ const createCalendar = () => {
       openable: false,
     }
   }
-  return calendar;
+  return calendar
 }
 
 export const useFirebaseStore = defineStore('firebase', () => {
@@ -99,7 +101,6 @@ export const useFirebaseStore = defineStore('firebase', () => {
       await updateOpenableStatus(new Date().getDate())
       await fetchStyleDocument()
       // await createStyledocument()
-
     } else {
       user.value = null
       isAdmin.value = false
@@ -210,14 +211,12 @@ export const useFirebaseStore = defineStore('firebase', () => {
         const data = firstDoc.data() as CalenderDocument
         julekalender.value = data.calender
 
-
-        const days = Object.values(julekalender.value);
-        let finalDays: CalenderDay[];
-        if(isAdmin.value) {
-          finalDays = days.sort((a, b) => a.day - b.day);
-        }
-        else {
-          finalDays = days;
+        const days = Object.values(julekalender.value)
+        let finalDays: CalenderDay[]
+        if (isAdmin.value) {
+          finalDays = days.sort((a, b) => a.day - b.day)
+        } else {
+          finalDays = days
         }
 
         const cal: Calender = {} as Calender
@@ -226,7 +225,6 @@ export const useFirebaseStore = defineStore('firebase', () => {
           cal[key] = day
         })
         julekalender.value = cal
-
       }
     })
   }
