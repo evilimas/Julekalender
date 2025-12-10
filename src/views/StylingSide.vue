@@ -25,6 +25,7 @@
           "Mountains of Christmas",
           "Mynerve",
           "Rubik",
+          "Bitcount Prop Single"
         ]);
 
 

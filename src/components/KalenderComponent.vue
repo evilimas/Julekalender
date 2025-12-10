@@ -101,7 +101,7 @@ onBeforeMount(() => {
       <ConfettiExplosion v-if="day.opened" :duration="3500" :particleCount="300"
         :colors="['#ff0000', '#efbf04', '#FFFFFF']" />
       <div :id="createId(day.day)" class="dag" :class="{ heightChange: day.opened }">
-        <div>
+        <div :style="{fontFamily: firebaseStore.styleDocument?.fontFamily}">
           <h3 :style="{
             backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}`,
             color: `${firebaseStore.styleDocument?.textColor || 'white'}`
