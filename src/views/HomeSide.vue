@@ -10,6 +10,9 @@ const firebaseStore = useFirebaseStore();
             <div class="snowflake" v-for="n in 150" :key="n"></div>
         </div>
         <KalenderComponent />
+        <div class="gris-container">
+            <img class="gris" src="../assets/marsipan_still.png" alt="marsipan gris" />
+        </div>
     </div>
 </template>
 
@@ -23,6 +26,24 @@ const firebaseStore = useFirebaseStore();
   height: calc(100vh - 100px);
   padding-top: 100px;
   overflow: hidden;
+}
+
+.gris-container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 150px;
+  z-index: 1;
+}
+
+.gris {
+  width: 100%;
+  transition: transform 0.3s ease-in-out;
+}
+
+.gris-container:hover .gris {
+  transform: scale(1.1);
+  content: url('../assets/marsipan_anim.gif');
 }
 
 /* Snow effect with CSS - lowered z-index for navigation */

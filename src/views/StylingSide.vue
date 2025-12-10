@@ -218,7 +218,8 @@
   padding: 2rem;
 
   margin: 0 auto;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: url('../assets/workshop.jpg') no-repeat center center fixed;
+  background-size: cover;
   min-height: 100vh;
   padding-top: 100px;
 }
@@ -238,6 +239,7 @@ h1{
 }
 .inputs {
   display: grid;
+  
   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   gap: 1.5rem;
   margin-bottom: 3rem;
@@ -267,6 +269,7 @@ h1{
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 2px solid #e0e0e0;
   color: rgb(70, 70, 70);
+  background: rgb(199, 199, 199);
 }
 label {
     color: rgb(43, 43, 43);
