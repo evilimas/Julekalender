@@ -21,6 +21,14 @@
           "Impact",
           "Fantasy",
           "Cursive",
+          "Roboto",
+          "Permanent Marker",
+          "Mountains of Christmas",
+          "Mynerve",
+          "Rubik",
+
+
+
         ]);
 
 
@@ -323,6 +331,13 @@ button:disabled {
 input:disabled {
     opacity: 0.7;
     cursor: not-allowed;
+}
+
+select {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #c0c0c0;
+    font-size: 1rem;
 }
 
 </style>
