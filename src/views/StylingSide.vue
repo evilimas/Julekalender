@@ -3,8 +3,8 @@
         import { useFirebaseStore } from '@/stores/FirebaseStore';
 
         const firebaseStore = useFirebaseStore();
-        const defaultBgImage = "./src/images/hero.jpg";
-        const bgImage = ref<string>(firebaseStore.styleDocument?.backgroundImage || defaultBgImage);
+        // const defaultBgImage = "./src/images/hero.jpg";
+        const bgImage = ref<string>(firebaseStore.styleDocument?.backgroundImage || "https://fcr.travel/wp-content/uploads/slider/cache/ade9b4727b7ec40d611a0c5a5b8fb3a6/30-3.jpg");
         const primaryColor = ref<string>(firebaseStore.styleDocument?.primaryColor || '#ffffff');
         const secondaryColor = ref<string>(firebaseStore.styleDocument?.secondaryColor || '#000000');
         const textColor = ref<string>(firebaseStore.styleDocument?.textColor || '#ffffff');
@@ -128,6 +128,20 @@
             message.value = 'Font oppdatert ✅';
           } catch (error) {
             message.value = 'Font oppdatering feilet ❌';
+            console.error(error);
+          } finally {
+            isUpdating.value = false;
+            setTimeout(() => message.value = '', 3000);
+          }
+        }
+        const updateStyle = async (styleOption : string, newStyle: string, style:string) => {
+          try {
+            isUpdating.value = true;
+            message.value = '';
+            await firebaseStore.updateStyleValue(styleOption, `${newStyle}`.value);
+            message.value = `${style} oppdatert ✅`;
+          } catch (error) {
+            message.value = `${style} oppdatering feilet ❌`;
             console.error(error);
           } finally {
             isUpdating.value = false;
