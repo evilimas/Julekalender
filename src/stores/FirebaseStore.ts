@@ -57,6 +57,7 @@ type StyleDocument = {
   secondaryTextColor: string
   messageColor: string
   createdAt: Timestamp | null
+  fontFamily: string
   uid: string
 }
 

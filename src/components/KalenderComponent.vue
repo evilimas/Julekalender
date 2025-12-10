@@ -77,7 +77,8 @@ const createId = (dagtall: number) => {
         :particleCount="400"
         :colors="['#ff0000', '#efbf04', '#FFFFFF']"
       />
-      <div :id="createId(day.day)" class="dag" :class="{ heightChange: day.opened }">
+      <div :id="createId(day.day)" class="dag" :class="{ heightChange: day.opened }"
+           :style="{fontFamily: firebaseStore.styleDocument?.fontFamily || 'Arial'}">
         <h3 :style="{
           backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}`,
           color: `${firebaseStore.styleDocument?.textColor || 'white'}`
