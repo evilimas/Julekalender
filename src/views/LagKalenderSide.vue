@@ -104,7 +104,9 @@ const updateKalender = async () => {
   padding: 2rem;
   /* max-width: 1200px; */
   margin: 0 auto;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+  background: url('../images/moon.png') no-repeat center center fixed;
+  background-size: cover;
   min-height: 100vh;
   padding-top: 100px;
 }
@@ -122,7 +124,8 @@ const updateKalender = async () => {
 .header h1 {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 4px 11px 12px rgba(0, 0, 0, 0.3);
+  /* color: #34495e; */
 }
 
 .header p {
