@@ -1,6 +1,8 @@
       <script lang="ts" setup>
-        import { ref } from 'vue';
+      import { onMounted, ref } from 'vue'
         import { useFirebaseStore } from '@/stores/FirebaseStore';
+      const store = useFirebaseStore();
+      import firebase from 'firebase/compat/app'
 
         const firebaseStore = useFirebaseStore();
         const defaultBgImage = "./src/images/hero.jpg";
@@ -26,11 +28,21 @@
           "Mountains of Christmas",
           "Mynerve",
           "Rubik",
-
-
-
+          "Bitcount Prop Single"
         ]);
 
+
+        /*const loadGoogleFonts = async (fonts : string[]) => {
+          const fontLink = document.createElement('link');
+
+          const fontFamilies = fonts.map(font => `${font}:wght@400`)
+
+          /!*fontLink.href = `https://fonts.googleapis.com/css?family=${fonts.join('&family=')}&display=swap`;*!/
+          fontLink.href = `https://fonts.googleapis.com/css?family=${fontFamilies.join('&family=')}&display=swap`;
+
+          fontLink.rel = 'stylesheet';
+          document.head.appendChild(fontLink);
+        }*/
 
         const updateBackground = async () => {
           try {
@@ -126,6 +138,7 @@
             message.value = '';
             await firebaseStore.updateStyleValue('fontFamily', fontFamily.value);
             message.value = 'Font oppdatert ✅';
+            /*await firebaseStore.loadGoogleFonts([fontFamily.value]);*/
           } catch (error) {
             message.value = 'Font oppdatering feilet ❌';
             console.error(error);
@@ -135,6 +148,10 @@
           }
         }
 
+
+        onMounted(() => {
+         store.loadGoogleFonts(availableFonts.value);
+        })
       </script>
 <template>
   <div class="container">
@@ -247,7 +264,7 @@ h1{
 }
 .inputs {
   display: grid;
-  
+
   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   gap: 1.5rem;
   margin-bottom: 3rem;
