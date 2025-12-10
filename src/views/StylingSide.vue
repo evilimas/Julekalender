@@ -10,8 +10,18 @@
         const textColor = ref<string>(firebaseStore.styleDocument?.textColor || '#ffffff');
         const secondaryTextColor = ref<string>(firebaseStore.styleDocument?.secondaryTextColor || '#000000');
         const messageColor = ref<string>(firebaseStore.styleDocument?.messageColor || '#000000');
+        const fontFamily = ref<string>(firebaseStore.styleDocument?.fontFamily || 'Aria');
         const isUpdating = ref<boolean>(false);
         const message = ref<string>('');
+        const availableFonts = ref<string[]>([
+          "Arial",
+          "Times New Roman",
+          "Courier New",
+          "Georgia",
+          "Impact",
+          "Fantasy",
+          "Cursive",
+        ]);
 
 
         const updateBackground = async () => {
@@ -102,6 +112,21 @@
           }
         };
 
+        const updateFont = async () => {
+          try {
+            isUpdating.value = true;
+            message.value = '';
+            await firebaseStore.updateStyleValue('fontFamily', fontFamily.value);
+            message.value = 'Font oppdatert ✅';
+          } catch (error) {
+            message.value = 'Font oppdatering feilet ❌';
+            console.error(error);
+          } finally {
+            isUpdating.value = false;
+            setTimeout(() => message.value = '', 3000);
+          }
+        }
+
       </script>
 <template>
   <div class="container">
@@ -168,6 +193,18 @@
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
                 </button>
             </div>
+          <div class="input">
+            <label for="text-color">Endre font</label>
+            <p>Velg skrifttype</p>
+            <select id="font-family" v-model="fontFamily" :disabled="isUpdating">
+              <option v-for="font in availableFonts" :key="font" :value="font">
+                {{font}}
+              </option>
+            </select>
+            <button @click="updateFont" :disabled="isUpdating">
+              {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
+            </button>
+          </div>
         </div>
     </div>
 

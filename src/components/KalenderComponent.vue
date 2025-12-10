@@ -78,13 +78,13 @@ onBeforeMount(() => {
   <div class="kalender">
 
     <div v-for="(day, index) in firebaseStore.julekalender" :key="index">
+      <ConfettiExplosion
+        v-if="day.opened"
+        :duration="3500"
+        :particleCount="300"
+        :colors="['#ff0000', '#efbf04', '#FFFFFF']"
+      />
       <div :id="createId(day.day)" class="dag" :class="{ heightChange: day.opened }">
-        <ConfettiExplosion
-          v-if="day.opened"
-          :duration="3500"
-          :particleCount="300"
-          :colors="['#ff0000', '#efbf04', '#FFFFFF']"
-        />
         <h3 :style="{
           backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}`,
           color: `${firebaseStore.styleDocument?.textColor || 'white'}`

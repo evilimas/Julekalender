@@ -1,15 +1,24 @@
 ﻿
 
 export function useFixLink() {
-  function linkConverter(link?: string): string {
-    if(!link) {
-      console.error('Link could not be found.')
+  function linkConverter(url: string): string {
+    const toReplace = "watch?v=";
+    const replaceWith = "embeded/";
+
+    if(!url) {
+      console.error('Url is empty.');
       return "";
     }
 
-    return link.split('&')[0].replace('watch?v=', "embed/");
+    const link = url.split('&')[0];
+
+    if(!link) {
+      console.error('Link could not be found.');
+      return "";
+    }
+    return link.replace(toReplace, replaceWith);
   }
 
-  return { linkConverter }
+  return { linkConverter };
 }
 
