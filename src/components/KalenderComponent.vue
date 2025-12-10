@@ -193,7 +193,7 @@ onBeforeMount(() => {
 
 .dag button:hover {
   transform: scale(1.1);
-  filter: hue-rotate(150deg) saturate(0.5) brightness(1.1);
+  filter: hue-rotate(5deg) brightness(0.9) contrast(1.2) saturate(1.1);
 }
 
 .closeAllDiv {
@@ -210,10 +210,13 @@ onBeforeMount(() => {
   border-radius: 6px;
   border-color: rgb(173, 162, 135);
   border-style: outset;
+  margin: 5px 10px;
 }
 
 .closeAllButton:hover {
-  filter: brightness(0.9) contrast(1.05) saturate(1.1) hue-rotate(-10deg);
+  filter: brightness(0.9) contrast(1.05) saturate(1.3) hue-rotate(-10deg);
+} .closeAllButton:active {
+  filter: brightness(0.7) contrast(1.3) saturate(1.7) hue-rotate(-12deg);
 }
 
 .dag iframe {
