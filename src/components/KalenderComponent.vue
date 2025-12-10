@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 import { useFirebaseStore, type CalenderDay } from '@/stores/FirebaseStore';
 const firebaseStore = useFirebaseStore();
 const currentDay = firebaseStore.currentDate.toDate().getDate();
@@ -10,8 +10,6 @@ const unlockLuke = (dayObj: CalenderDay) => {
   const getCurrentElement = document.getElementById(createId(dayObj.day));
   const getCurrentElementbutton = getCurrentElement?.getElementsByTagName("button")[0];
   // dayObj.openable !!!!
-
-  updateOpenables();
 
   if (dayObj.openable) { //<-- dette burde være dayObj.openable!!
     if (dayObj.opened == true) {
@@ -25,17 +23,26 @@ const unlockLuke = (dayObj: CalenderDay) => {
     }
   }
   if (dayObj.openable == false) {
-    console.log("well?")
+    console.log("not allowed!! nisse for you");
+
+    const nisseDiv = document.createElement("div");
+    nisseDiv.setAttribute("class", "nisse");
+    nisseDiv.innerHTML = `supposed to be a nisseanimasjon her`;
+    getCurrentElement?.appendChild(nisseDiv);
   }
+
+  console.log("openable: ", counts().openable, "opened: ", counts().opened);
+
 }
 
-const updateOpenables = () => {
+const updateOpenables = (vari?: boolean) => {
   for (const key in firebaseStore.julekalender) {
     const item = firebaseStore.julekalender[key as keyof typeof firebaseStore.julekalender];
     if (item!.day <= currentDay) {
       item!.openable = true;
     }
     console.log(item!.openable);
+    if (vari !== undefined) return item!.openable;
   }
 }
 
@@ -63,21 +70,21 @@ const createId = (dagtall: number) => {
   return `luke_${dagtall}`;
 }
 
-/*onMounted(() => {
-  updateOpenables();
-})*/
+onBeforeMount(() => {
+  console.log(updateOpenables(true), "ok yes updateOpenables kjører, denne er bare litt rar når det gjelder å returnere en verdi til console.log..");
+})
 </script>
 <template>
   <div class="kalender">
 
     <div v-for="(day, index) in firebaseStore.julekalender" :key="index">
-      <ConfettiExplosion
-        v-if="day.opened"
-        :duration="3500"
-        :particleCount="400"
-        :colors="['#ff0000', '#efbf04', '#FFFFFF']"
-      />
       <div :id="createId(day.day)" class="dag" :class="{ heightChange: day.opened }">
+        <ConfettiExplosion
+          v-if="day.opened"
+          :duration="3500"
+          :particleCount="300"
+          :colors="['#ff0000', '#efbf04', '#FFFFFF']"
+        />
         <h3 :style="{
           backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}`,
           color: `${firebaseStore.styleDocument?.textColor || 'white'}`
