@@ -6,18 +6,13 @@ const currentDay = firebaseStore.currentDate.toDate().getDate();
 import firebase from 'firebase/compat/app';
 import ConfettiExplosion from "vue-confetti-explosion";
 
+const mockDays = (dayObj: CalenderDay) => {
+  return !(dayObj.openable);
+}
+
 const unlockLuke = (dayObj: CalenderDay) => {
   const getCurrentElement = document.getElementById(createId(dayObj.day));
   const getCurrentElementbutton = getCurrentElement?.getElementsByTagName("button")[0];
-  const doesNisseExist = () => {
-    const classArr = [];
-    const kids = getCurrentElement?.children;
-
-    for (let i = 0; i < kids!.length; i++) {
-      classArr.push(kids![i]!.className);
-    }
-    return classArr.includes("nisse");
-  }
   // dayObj.openable !!!!
 
   if (dayObj.openable) { //<-- dette burde være dayObj.openable!!
@@ -33,26 +28,19 @@ const unlockLuke = (dayObj: CalenderDay) => {
   }
   if (dayObj.openable == false) {
     console.log("not allowed!! nisse for you");
-
-    if (!doesNisseExist()) {
-      const nisseDiv = document.createElement("div");
-      nisseDiv.setAttribute("class", "nisse");
-      nisseDiv.innerHTML = /*HTML*/`
-        <img src="../assets/marsipan_nisse_anim.gif" alt="Sinna nisse som faller">
-      `;
-      getCurrentElement?.appendChild(nisseDiv);
-
-      /*
-      const myTimeOut = setTimeout(() => {
-        getCurrentElement?.removeChild(nisseDiv);
-      }, 5000);
-      */
+    if (dayObj.opened == true) {
+      dayObj.opened = false;
     }
-
+    else {
+      dayObj.opened = true;
+      
+      const myTimeOut = setTimeout(() => {
+        dayObj.opened = false;
+      }, 5000);
+    }
   }
 
   console.log("openable: ", counts().openable, "opened: ", counts().opened);
-
 }
 
 const updateOpenables = (vari?: boolean) => {
@@ -98,14 +86,14 @@ onBeforeMount(() => {
   <div class="kalender">
 
     <div v-for="(day, index) in firebaseStore.julekalender" :key="index">
-      <ConfettiExplosion v-if="day.opened" :duration="3500" :particleCount="300"
+      <ConfettiExplosion v-if="day.opened && day.openable" :duration="3500" :particleCount="300"
         :colors="['#ff0000', '#efbf04', '#FFFFFF']" />
-      <div :id="createId(day.day)" class="dag" :class="{ heightChange: day.opened }">
-        <div :style="{fontFamily: firebaseStore.styleDocument?.fontFamily}">
+      <div :id="createId(day.day)" class="dag" :class="{ heightChange: (day.opened && day.openable) }">
+        <div :style="{ fontFamily: firebaseStore.styleDocument?.fontFamily }">
           <h3 :style="{
             backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}`,
             color: `${firebaseStore.styleDocument?.textColor || 'white'}`
-          }" :class="{ smallerTitle: day.opened }">
+          }" :class="{ smallerTitle: (day.opened && day.openable) }">
             Dag {{ day.day }}
           </h3>
           <button
@@ -113,7 +101,7 @@ onBeforeMount(() => {
             @click="unlockLuke(day)">
             lås opp
           </button>
-          <div v-show="day.opened">
+          <div v-show="day.opened && day.openable">
             <p :style="{ color: `${firebaseStore.styleDocument?.messageColor || '#ffff'}` }">{{ day.texts }}</p>
             <img :src="day.image" alt="Bilde for dagen" v-if="day.image" />
             <div v-if="day.video">
@@ -121,12 +109,9 @@ onBeforeMount(() => {
             </div>
           </div>
         </div>
-        <!--
-        <div class="nisse">
+        <div class="nisse" v-show="day.opened && !day.openable">
           <img src="../assets/marsipan_nisse_anim.gif" alt="Sinna nisse som faller">
         </div>
-
-        --->
       </div>
     </div>
   </div>
@@ -163,7 +148,7 @@ onBeforeMount(() => {
   grid-template-columns: 1fr;
 }
 
-.dag > div {
+.dag>div {
   grid-row-start: 1;
   grid-column-start: 1;
 }
