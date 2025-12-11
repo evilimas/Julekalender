@@ -37,7 +37,7 @@ const firebaseStore = useFirebaseStore();
 }
 
 .gris {
-  width: 300%;
+  width: 250%;
   transition: transform 0.3s ease-in-out;
 }
 
