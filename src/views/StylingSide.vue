@@ -103,10 +103,10 @@
                 </button>
             </div>
             <div class="input">
-                <label for="text-color">Luke melding farge:</label>
-                <p>Luke melding farge</p>
+                <label for="text-color">Luke innholdet tekst farge:</label>
+                <p>Luke innholdet tekst farge</p>
                 <input id="message-text-color" type="color" v-model="messageColor" :disabled="isUpdating"/>
-                <button @click="updateStyle('messageColor', messageColor, 'Luke melding farge')" :disabled="isUpdating">
+                <button @click="updateStyle('messageColor', messageColor, 'Luke innholdet tekst farge')" :disabled="isUpdating">
                   {{ isUpdating ? 'Oppdaterer...' : 'Oppdater' }}
                 </button>
             </div>
