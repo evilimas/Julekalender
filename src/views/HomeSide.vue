@@ -5,7 +5,7 @@ const firebaseStore = useFirebaseStore();
 </script>
 
 <template>
-    <div class="container" :style="{ backgroundImage: `url(${firebaseStore.styleDocument?.backgroundImage || 'https://fcr.travel/wp-content/uploads/slider/cache/ade9b4727b7ec40d611a0c5a5b8fb3a6/30-3.jpg'})` }">
+    <div class="container" :style="{ backgroundImage: `url(${firebaseStore.styleDocument?.backgroundImage || './src/images/hero.jpg'})` }">
         <div class="snow-container">
             <div class="snowflake" v-for="n in 150" :key="n"></div>
         </div>
@@ -21,9 +21,7 @@ const firebaseStore = useFirebaseStore();
   position: relative;
   justify-content: center;
   align-items: center;
-  /* background: no-repeat center center fixed; */
-  background-repeat: no-repeat;
-  background-position: center center;
+  background: url('../images/hero.jpg') no-repeat center center;
   background-size: cover;
   height: calc(100vh - 100px);
   padding-top: 100px;
@@ -32,9 +30,9 @@ const firebaseStore = useFirebaseStore();
 
 .gris-container {
   position: absolute;
-  bottom: 25px;
-  right: 25px;
-  width: 170px;
+  bottom: 0;
+  right: 0;
+  width: 150px;
   z-index: 1;
 }
 
@@ -45,7 +43,7 @@ const firebaseStore = useFirebaseStore();
 
 .gris-container:hover .gris {
   transform: scale(1.1);
-  content: url('../assets/marsipan_anim.gif');
+  content: url('../assets/marsipan_anim_ny.gif');
 }
 
 /* Snow effect with CSS - lowered z-index for navigation */
