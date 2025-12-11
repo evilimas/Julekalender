@@ -33,10 +33,15 @@ const unlockLuke = (dayObj: CalenderDay) => {
     }
     else {
       dayObj.opened = true;
-      
-      const myTimeOut = setTimeout(() => {
+
+      const myTimeOut1 = setTimeout(() => {
+        getCurrentElementbutton!.classList.add("hide");
+      }, 50);
+
+      const myTimeOut2 = setTimeout(() => {
         dayObj.opened = false;
-      }, 5000);
+        getCurrentElementbutton!.classList.remove("hide");
+      }, 4000);
     }
   }
 
@@ -110,7 +115,7 @@ onBeforeMount(() => {
           </div>
         </div>
         <div class="nisse" v-show="day.opened && !day.openable">
-          <img src="../assets/marsipan_nisse_anim.gif" alt="Sinna nisse som faller">
+          <img src="../assets/marsipan_nisse_anim_ny_mindre.gif" alt="Sinna nisse som faller">
         </div>
       </div>
     </div>
@@ -215,7 +220,9 @@ onBeforeMount(() => {
 
 .closeAllButton:hover {
   filter: brightness(0.9) contrast(1.05) saturate(1.3) hue-rotate(-10deg);
-} .closeAllButton:active {
+}
+
+.closeAllButton:active {
   filter: brightness(0.7) contrast(1.3) saturate(1.7) hue-rotate(-12deg);
 }
 
@@ -244,5 +251,9 @@ onBeforeMount(() => {
 .nisse img {
   width: 100%;
   height: auto;
+}
+
+.hide {
+  visibility: hidden;
 }
 </style>
