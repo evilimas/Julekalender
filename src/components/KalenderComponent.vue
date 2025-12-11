@@ -131,11 +131,13 @@ onBeforeMount(() => {
 .kalender {
   display: grid;
   max-width: 1200px;
+  max-height: 60vh;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 22px 27px;
   /* gap: 40px; */
   margin: auto;
   /* margin-top: 110px; */
+  overflow-y: scroll;
 }
 
 .dag {
