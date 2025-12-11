@@ -99,10 +99,10 @@ onBeforeMount(() => {
   <div class="kalender">
 
     <div v-for="(day, index) in firebaseStore.julekalender" :key="index">
-      <ConfettiExplosion v-if="day.opened && day.openable" :duration="1500" :particleCount="50"
+      <ConfettiExplosion v-if="day.opened && day.openable" :duration="1500" :particleCount="50" :stageHeight="1000" :stageWidth="1000"
           :colors="['#ff0000', '#efbf04', '#FFFFFF']" />
       <div :id="createId(day.day)" class="dag" :class="{ heightChange: (day.opened && day.openable) }">
-        <ConfettiExplosion v-if="day.opened && day.openable" :duration="2000" :particleCount="200"
+        <ConfettiExplosion v-if="day.opened && day.openable" :duration="2000" :particleCount="200" :stageHeight="500"
           :colors="['#ff0000', '#efbf04', '#FFFFFF']" />
         <div :style="{ fontFamily: firebaseStore.styleDocument?.fontFamily }" >
           <h3 :style="{
