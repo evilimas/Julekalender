@@ -31,18 +31,17 @@ const firebaseStore = useFirebaseStore();
 .gris-container {
   position: absolute;
   bottom: 0;
-  right: 0;
+  right: 320px;
   width: 150px;
   z-index: 1;
 }
 
 .gris {
-  width: 100%;
+  width: 300%;
   transition: transform 0.3s ease-in-out;
 }
 
 .gris-container:hover .gris {
-  transform: scale(1.1);
   content: url('../assets/marsipan_anim_ny.gif');
 }
 

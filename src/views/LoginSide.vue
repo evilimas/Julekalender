@@ -20,7 +20,7 @@ watch(
 
 <template>
   <div class="login-view">
-    <h1>Jullekalender</h1>
+    <h1>Julekalender</h1>
     <section id="logged-out-view" v-if="loginPage">
       <h2>For å starte opne kalenderen, vennligst logg inn.</h2>
       <div class="container google">
