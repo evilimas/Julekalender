@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, watch } from 'vue';
 import { useFirebaseStore, type CalenderDay } from '@/stores/FirebaseStore';
 const firebaseStore = useFirebaseStore();
-const currentDay = firebaseStore.currentDate.toDate().getDate();
-import firebase from 'firebase/compat/app';
+const currentDay = new Date().getDate();
+
 import ConfettiExplosion from "vue-confetti-explosion";
 
 const mockDays = (dayObj: CalenderDay) => {
@@ -18,7 +18,7 @@ const unlockLuke = (dayObj: CalenderDay) => {
   if (dayObj.openable) { //<-- dette burde være dayObj.openable!!
     if (dayObj.opened == true) {
       getCurrentElementbutton!.innerHTML = "åpne";
-      //buttonTxt.value = "Open";
+      // buttonTxt.value = "Open";
       dayObj.opened = false;
     }
     else {
@@ -34,11 +34,11 @@ const unlockLuke = (dayObj: CalenderDay) => {
     else {
       dayObj.opened = true;
 
-      const myTimeOut1 = setTimeout(() => {
+       setTimeout(() => {
         getCurrentElementbutton!.classList.add("hide");
       }, 50);
 
-      const myTimeOut2 = setTimeout(() => {
+       setTimeout(() => {
         dayObj.opened = false;
         getCurrentElementbutton!.classList.remove("hide");
       }, 4000);
@@ -83,6 +83,14 @@ const createId = (dagtall: number) => {
   return `luke_${dagtall}`;
 }
 
+// Watch for calendar data changes and update openables
+watch(() => firebaseStore.julekalender, (newCalendar) => {
+  if (newCalendar) {
+    console.log("Calendar data loaded, updating openables...");
+    updateOpenables();
+  }
+}, { immediate: true });
+
 onBeforeMount(() => {
   console.log(updateOpenables(true), "ok yes updateOpenables kjører, denne er bare litt rar når det gjelder å returnere en verdi til console.log..");
 })
@@ -91,10 +99,12 @@ onBeforeMount(() => {
   <div class="kalender">
 
     <div v-for="(day, index) in firebaseStore.julekalender" :key="index">
-      <ConfettiExplosion v-if="day.opened && day.openable" :duration="3500" :particleCount="300"
-        :colors="['#ff0000', '#efbf04', '#FFFFFF']" />
+      <ConfettiExplosion v-if="day.opened && day.openable" :duration="1500" :particleCount="50"
+          :colors="['#ff0000', '#efbf04', '#FFFFFF']" />
       <div :id="createId(day.day)" class="dag" :class="{ heightChange: (day.opened && day.openable) }">
-        <div :style="{ fontFamily: firebaseStore.styleDocument?.fontFamily }">
+        <ConfettiExplosion v-if="day.opened && day.openable" :duration="2000" :particleCount="200"
+          :colors="['#ff0000', '#efbf04', '#FFFFFF']" />
+        <div :style="{ fontFamily: firebaseStore.styleDocument?.fontFamily }" >
           <h3 :style="{
             backgroundColor: `${firebaseStore.styleDocument?.primaryColor || 'maroon'}`,
             color: `${firebaseStore.styleDocument?.textColor || 'white'}`
@@ -106,7 +116,7 @@ onBeforeMount(() => {
             @click="unlockLuke(day)">
             lås opp
           </button>
-          <div v-show="day.opened && day.openable">
+          <div v-if="day.opened && day.openable">
             <p :style="{ color: `${firebaseStore.styleDocument?.messageColor || '#ffff'}` }">{{ day.texts }}</p>
             <img :src="day.image" alt="Bilde for dagen" v-if="day.image" />
             <div v-if="day.video">
@@ -129,15 +139,19 @@ onBeforeMount(() => {
 
 <style scoped>
 .kalender {
+
   display: grid;
   max-width: 1200px;
   max-height: 60vh;
+  padding: 30px;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 22px 27px;
   /* gap: 40px; */
   margin: auto;
   /* margin-top: 110px; */
-  overflow-y: scroll;
+  overflow-y: auto;
+  scrollbar-color: rgba(0,0,0,0.3) transparent;
+  scrollbar-width: thin;
 }
 
 .dag {
@@ -174,6 +188,25 @@ onBeforeMount(() => {
   width: 200px;
   overflow-y: auto;
   z-index: 10;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.3) transparent;
+}
+
+.heightChange::-webkit-scrollbar {
+  width: 6px;
+}
+
+.heightChange::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.heightChange::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.3);
+  border-radius: 3px;
+}
+
+.heightChange::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.5);
 }
 
 .dag h3 {
