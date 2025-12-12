@@ -24,7 +24,8 @@
     "vue-niege": "^0.1.1",
     "vue-router": "^4.6.3",
     "vue-snowf": "^0.0.2",
-    "vue-snowfall": "^1.0.3"
+    "vue-snowfall": "^1.0.3",
+    "vue3-popper": "^1.5.0"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.3",
