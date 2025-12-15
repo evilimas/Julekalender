@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import router from '@/router'
 import { auth } from '@/services/firebase'
 import type { User } from 'firebase/auth'
@@ -266,13 +266,13 @@ export const useFirebaseStore = defineStore('firebase', () => {
 
   const fetchStyleDocument = async (): Promise<void> => {
     if (!user.value?.uid) return
-    const q = query(collection(db, 'styles'), where('uid', '==',"Go5HejUviHVPo4JfHVLgxB1e45G3"))
+    const q = query(collection(db, 'styles'), where('uid', '==', 'Go5HejUviHVPo4JfHVLgxB1e45G3'))
     const querySnapshot = await getDocs(q)
 
     if (!querySnapshot.empty) {
       const doc = querySnapshot.docs[0]
       styleDocument.value = { ...(doc?.data() as StyleDocument) }
-      await loadGoogleFonts(styleDocument.value.fontFamily);
+      await loadGoogleFonts(styleDocument.value.fontFamily)
     }
   }
 
@@ -285,16 +285,15 @@ export const useFirebaseStore = defineStore('firebase', () => {
     await fetchStyleDocument()
   }
 
-  const loadGoogleFonts = async (fonts : string | string[]) => {
-    const fontLink = document.createElement('link');
-    const fontFamilies = Array.isArray(fonts) ? fonts.join('&family=') : fonts;
+  const loadGoogleFonts = async (fonts: string | string[]) => {
+    const fontLink = document.createElement('link')
+    const fontFamilies = Array.isArray(fonts) ? fonts.join('&family=') : fonts
 
-    fontLink.href = `https://fonts.googleapis.com/css?family=${fontFamilies}:wght@400&&display=swap`;
+    fontLink.href = `https://fonts.googleapis.com/css?family=${fontFamilies}:wght@400&&display=swap`
 
-    fontLink.rel = 'stylesheet';
-    document.head.appendChild(fontLink);
+    fontLink.rel = 'stylesheet'
+    document.head.appendChild(fontLink)
   }
-
 
   return {
     user,
@@ -312,6 +311,6 @@ export const useFirebaseStore = defineStore('firebase', () => {
     // styling
     updateStyleValue,
     styleDocument,
-    loadGoogleFonts
+    loadGoogleFonts,
   }
 })
