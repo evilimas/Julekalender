@@ -6,9 +6,9 @@ const currentDay = new Date().getDate();
 
 import ConfettiExplosion from "vue-confetti-explosion";
 
-const mockDays = (dayObj: CalenderDay) => {
-  return !(dayObj.openable);
-}
+// const mockDays = (dayObj: CalenderDay) => {
+//   return !(dayObj.openable);
+// }
 
 const unlockLuke = (dayObj: CalenderDay) => {
   const getCurrentElement = document.getElementById(createId(dayObj.day));
@@ -146,16 +146,14 @@ onBeforeMount(() => {
   padding: 30px;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 22px 27px;
-  /* gap: 40px; */
   margin: auto;
-  /* margin-top: 110px; */
   overflow-y: auto;
   scrollbar-color: rgba(0,0,0,0.3) transparent;
   scrollbar-width: thin;
 }
 
 .dag {
-  /* margin: 20px; */
+
   border: 1px solid #ccc;
   background: linear-gradient(to bottom, rgb(203, 239, 255, 0.3), rgb(60, 66, 133, 0.5));
   text-align: center;
@@ -175,11 +173,8 @@ onBeforeMount(() => {
 }
 
 .dag p {
-  /*background: linear-gradient(to bottom, rgb(184, 182, 175), rgb(226, 221, 205), rgb(232, 229, 220), white);*/
-  /*background-clip: text;*/
   padding: 5px;
   color: silver;
-  /*color: transparent;*/
 }
 
 .heightChange {
@@ -270,11 +265,6 @@ onBeforeMount(() => {
 }
 
 .dag img {
-  /* padding: 4px 0;
-  height: 100px;
-  width: 80px;
-  border-radius: 20px;
-  object-fit: cover; */
   width: 100%;
   max-width: 200px;
   height: 200px;
